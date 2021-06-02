@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 防抖函数：疯狂点击按钮，每次点击的时间间隔都小于规定时间，那么相应的方法不会执行
+        // (首次不执行)
+        function debounce1(fn, delay = 300) {
+            let timer = null;
+            return function (...args) {
+                if (timer) clearTimeout(timer);
+                timer = setTimeout(() => {
+                    fn.apply(this, args);
+                }, delay);
+            };
+        };
+        // (首次执行)
+        function debounce2(fn, delay = 300, atBegin = true) {
+            let timer = null, last = 0, during;
+            return function (...args) {
+                const exec = () => {
+                    fn.apply(this, args);
+                }
+                if (atBegin && !timer) {
+                    exec();
+                    atBegin = false;
+                } else {
+                    during = Date.now() - last;
+                    if (during > delay) {
+                        exec();
+                    } else {
+                        if (timer) clearTimeout(timer);
+                        timer = setTimeout(function () {
+                            exec();
+                        }, delay);
+                    }
+                }
+                last = Date.now();
+            };
+        };
+
+        window.onresize = debounce2(function () {
+            console.log(111, arguments);
+        }, 500);
+    </script>
+</body>
+
+</html>

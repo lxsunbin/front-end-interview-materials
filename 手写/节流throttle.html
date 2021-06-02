@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 节流函数：疯狂点击按钮，规定的时间间隔内只触发一次相应的方法
+        // 1.定时器方式(首次不执行)
+        function throttle1(fn, delay = 300) {
+            let timer = null;
+            return function (...args) {
+                if (!timer) {
+                    timer = setTimeout(() => {
+                        fn.apply(this, args);
+                        timer = null;
+                    }, delay);
+                }
+            };
+        };
+        // 2.时间戳方式(首次执行)
+        function throttle2(fn, delay = 300) {
+            let pre = 0;
+            return function (...args) {
+                let now = new Date().getTime();
+                if (now - pre > delay) {
+                    fn.apply(this, args);
+                    pre = now;
+                }
+            };
+        };
+
+        window.onresize = throttle1(function () {
+            console.log(111, arguments);
+        }, 2000);
+    </script>
+</body>
+
+</html>
