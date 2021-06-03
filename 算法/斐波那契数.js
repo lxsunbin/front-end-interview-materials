@@ -4,15 +4,12 @@
  * @return {*}
  */
 var fib = function (n) {
-	if (n < 2) return n;
-	let pre = 0,
-		cur = 1;
-
-	for (let i = 2; i <= n; ++i) {
-		cur = cur + pre;
-		pre = cur - pre;
-	}
-
-	return cur;
+    if (n < 2) return n;
+    let cur = 1;
+    let prev = 0;
+    for (let i=2;i<=n;i++){
+        [prev,cur] = [cur,(prev+cur)%1000000007]
+    }
+    return cur
 };
 console.log(fib(10));
