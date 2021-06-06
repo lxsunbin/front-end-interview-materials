@@ -1,4 +1,4 @@
-#### 一、Html&&Css
+####一、Html&&Css
 
 Q：doctype的作用
 
@@ -68,6 +68,7 @@ Q：BFC概念？作用？常用场景？
   </pre>
 </details>
 
+
 [BFC的概念与应用场景](https://juejin.cn/post/6844903753074606094)
 
 
@@ -97,6 +98,7 @@ Q：Flex？注意flex：1的含义，一般会给你个场景题
   当flex取值为1个数字和1个长度或百分比时，设置的是flex-grow和flex-basis的值，flex-shrink值时初始值，如flex:1 20%,等同于flex: 1 1 20%。
   </pre>
 </details>
+
 
 
 
@@ -364,8 +366,6 @@ Q：说说你知道的JavaScript设计模式？观察者和发布订阅的区别
   	<img src='https://segmentfault.com/img/remote/1460000021272626'/>
   </pre>
 </details>
-
-
 [JavaScript设计模式es6（23种)](https://juejin.cn/post/6844904032826294286)
 
 [JavaScript设计模式——观察者模式 vs 发布订阅模式](https://segmentfault.com/a/1190000023825602)
@@ -397,6 +397,27 @@ Q：ES Module与 CommonJS 模块的差异？两者互相加载的方式？一般
 <details>
   <summary>点击查看</summary>
   <pre>
+  <b>IIFE</b>：使用自执行函数来编写模块化，特点：<b>在一个单独的函数作用域中执行代码，避免变量冲突。</b>
+    (function(){
+    return {
+      data:[]
+    }
+  })()
+  <b>AMD</b>：使用requireJS 来编写模块化，特点：<b>依赖必须提前声明好。</b>
+  define('./index.js',function(code){
+    // code 就是index.js 返回的内容
+  })
+  <b>CMD</b>：使用seaJS 来编写模块化，特点：<b>支持动态引入依赖文件。</b>
+  define(function(require, exports, module) {  
+    var indexCode = require('./index.js');
+  })
+  <b>CommonJS</b>：nodejs 中自带的模块化。
+  var fs = require('fs');
+  <b>ES Modules</b>：ES6 引入的模块化，支持import 来引入另一个 js 。
+  import a from 'a';
+  <b>UMD</b>：兼容AMD，CommonJS 模块化语法。
+<b>webpack(require.ensure)</b>：webpack 2.x 版本中的代码分割。
+  <br/>
   <b>commonjs与ES6的module还是有很大区别的：</b>
   1、两者的模块导入导出语法不同：commonjs是module.exports，exports导出，require导入；ES6则是export导出，import导入。
   2、commonjs是运行时加载模块，ES6是在静态编译期间就确定模块的依赖。
@@ -407,7 +428,6 @@ Q：ES Module与 CommonJS 模块的差异？两者互相加载的方式？一般
   7、CommonJs 是单个值导出，ES6 Module可以导出多个
   </pre>
 </details>
-
 
 [再次梳理AMD、CMD、CommonJS、ES6 Module的区别](https://juejin.cn/post/6844903983987834888)
 
@@ -463,6 +483,7 @@ Q：谈谈React
 
 
 
+
 Q：为什么React要用JSX？
 
 <details>
@@ -479,6 +500,7 @@ Q：为什么React要用JSX？
   </pre>
   <img src='https://s0.lgstatic.com/i/image/M00/73/A4/Ciqc1F_GJSSAU6odAAFLeX8UyTo307.png'/>
 </details>
+
 
 
 
@@ -502,6 +524,7 @@ Q：生命周期详细描述一下？官方为什么改变？如何避免生命�
   </pre>
 </details>
 
+
 [React v16.3之后的组件生命周期函数](https://zhuanlan.zhihu.com/p/38030418)
 
 [我对 React V16.4 生命周期的理解](https://zhuanlan.zhihu.com/p/150929928)
@@ -514,10 +537,16 @@ Q：调用 setState 之后发生了什么？
 	<summary>点击查看</summary>
   <pre>
   在代码中调用setState函数之后，React 会将传入的参数对象与组件当前的状态合并，然后触发所谓的调和过程（Reconciliation）。经过调和过程，React 会以相对高效的方式根据新的状态构建 React 元素树并且着手重新渲染整个UI界面。在 React 得到元素树之后，React 会自动计算出新的树与老树的节点差异，然后根据差异对界面进行最小化重渲染。在差异计算算法中，React 能够相对精确地知道哪些位置发生了改变以及应该如何改变，这就保证了按需更新，而不是全部重新渲染。
-  </pre>
+  1、在 setState 的时候，React 会为当前节点创建一个 updateQueue 的更新列队。
+  2、然后会触发 reconciliation 过程，在这个过程中，会使用名为 Fiber 的调度算法，开始生成新的 Fiber 树， Fiber 算法的最大特点是可以做到异步可中断的执行。
+  3、然后 React Scheduler 会根据优先级高低，先执行优先级高的节点，具体是执行 doWork 方法。
+  4、在 doWork 方法中，React 会执行一遍 updateQueue 中的方法，以获得新的节点。然后对比新旧节点，为老节点打上 更新、插入、替换 等 Tag。
+  5、当前节点 doWork 完成后，会执行 performUnitOfWork 方法获得新节点，然后再重复上面的过程。
+  6、当所有节点都 doWork 完成后，会触发 commitRoot 方法，React 进入 commit 阶段。
+  7、在 commit 阶段中，React 会根据前面为各个节点打的 Tag，一次性更新整个 dom 元素。</pre>
 </details>
 
- `
+
 
 Q：如何设计React组件？
 
@@ -531,6 +560,7 @@ Q：如何设计React组件？
   从工程实践而言，通过文件夹划分的方式切分代码。我初步常用的分割方式是将页面单独建立一个目录，将复用性略高的 components 建立一个目录，在下面分别建立 basic、container 和 hoc 三类。这样可以保证无法复用的业务逻辑代码尽量留在 Page 中，而可以抽象复用的部分放入 components 中。其中 basic 文件夹放展示组件，由于展示组件本身与业务关联性较低，所以可以使用 Storybook 进行组件的开发管理，提升项目的工程化管理能力。
   </pre>
 </details>
+
 
 
 
@@ -552,6 +582,7 @@ Q：说说你对虚拟DOM的理解？直接全量更新和diff哪个快（这个
   <img src='https://s0.lgstatic.com/i/image/M00/8C/05/Ciqc1F_kXCaAJS7GAACbWvarErs717.png'/>
   </pre>
 </details>
+
 
 [网上都说操作真实 DOM 慢，但测试结果却比 React 更快，为什么？](https://www.zhihu.com/question/31809713)
 
@@ -580,6 +611,7 @@ Q：与其他框架相比，React 的 diff 算法有何不同？
 
 
 
+
 Q：什么是HOC？React里面用过哪些？
 
 <details>
@@ -593,6 +625,7 @@ Q：什么是HOC？React里面用过哪些？
 	Props 控制
   </pre>
 </details>
+
 
 
 
@@ -614,6 +647,7 @@ Q：如何面向组件跨层级通信？
   <img src='https://s0.lgstatic.com/i/image/M00/8A/F2/Ciqc1F_bAvqAGCQcAAC9M-t_bsw991.png'/>
   </pre>
 </details>
+
 
 
 
@@ -642,6 +676,7 @@ Q：列举一种你了解的 React 状态管理框架
 
 
 
+
 Q：如何解释 React 的渲染流程？
 
 <details>
@@ -667,6 +702,7 @@ Q：如何解释 React 的渲染流程？
 
 
 
+
 Q：React 的渲染异常会造成什么后果？
 
 <details>
@@ -682,6 +718,7 @@ Q：React 的渲染异常会造成什么后果？
   <img src='https://s0.lgstatic.com/i/image/M00/8C/C6/CgqCHl_0BcmAdxv4AAGsUAUv0QQ275.png'/>
   </pre>
 </details>
+
 
 
 
@@ -720,6 +757,7 @@ Q：如何避免重复渲染？
 
 
 
+
 Q：如何提升 React 代码可维护性？
 
 <details>
@@ -737,6 +775,7 @@ Q：如何提升 React 代码可维护性？
 
 
 
+
 Q：hooks出现的意义？类组件和函数组件之间的区别是什么？
 
 <details>
@@ -751,6 +790,7 @@ Q：hooks出现的意义？类组件和函数组件之间的区别是什么？
   <img src='https://s0.lgstatic.com/i/image/M00/7E/CE/CgqCHl_PXDiAO20DAABdvYlGsmA577.png'/>
   </pre>
 </details>
+
 [React Hooks 入门教程](https://www.ruanyifeng.com/blog/2019/09/react-hooks.html)
 
 [React函数组件和类组件的区别](https://www.jianshu.com/p/81faec8adb6c)
@@ -779,6 +819,7 @@ Q：hooks的限制条件？
 
 
 
+
 Q：谈谈hooks的设计模式？
 
 <details>
@@ -797,6 +838,7 @@ Q：谈谈hooks的设计模式？
 
 
 
+
 Q：useEffect 与 useLayoutEffect 区别在哪里？
 
 <details>
@@ -808,6 +850,7 @@ Q：useEffect 与 useLayoutEffect 区别在哪里？
   <img src='https://s0.lgstatic.com/i/image2/M01/08/32/Cip5yGAKhRCAX99HAAD0YKYP40c980.png'/>
   </pre>
 </details>
+
 
 
 
@@ -831,6 +874,7 @@ Q：setState 同步还是异步？比较常问，问的可能也比较深入
 	<img src='https://s0.lgstatic.com/i/image2/M01/01/3E/CgpVE1_YU2KAStLdAAFVKxh7Dyg317.png'/>
   </pre>
 </details>
+
 [setState是同步的还是异步的？](https://www.jianshu.com/p/ce39a08b585e)
 
 
@@ -858,6 +902,7 @@ Q：React-Router 的实现原理及工作方式分别是什么？
   <img src='https://s0.lgstatic.com/i/image2/M01/0A/9E/Cip5yGASblWAeI84AAESDjKgi9U468.png'/>
   </pre>
 </details>
+
 
 
 #### 四、Http && 浏览器
@@ -1102,6 +1147,7 @@ Q：node常用的一些模块，fs/path/http等等
   </pre>
 </details>
 
+
 [nodeJs常用的内置模块](https://blog.csdn.net/Charissa2017/article/details/104951488)
 
 
@@ -1139,6 +1185,7 @@ Q：Stream 概念？使用场景？常见的Stream？
   4、Transform - 在读写过程中可以修改和变换数据的 Duplex 流 (例如 zlib.createDeflate())
   </pre>
 </details>
+
 [前端有关node.js的面试题含答案](https://my.oschina.net/u/4696788/blog/4676580)
 
 
