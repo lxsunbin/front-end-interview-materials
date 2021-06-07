@@ -14,10 +14,11 @@ CSS1Compat：标准模式，浏览器使用W3C的标准解析渲染页面。
 <br/>
 这个属性会被浏览器识别并使用，但是如果你的页面没有DOCTYPE的声明，那么compatMode默认就是BackCompat，
 浏览器按照自己的方式解析渲染页面，那么，在不同的浏览器就会显示不同的样式。
-如果你的页面添加了<!DOCTYPE html>那么，那么就等同于开启了标准模式
+如果你的页面添加了DOCTYPE，那么就等同于开启了标准模式
 那么浏览器就得老老实实的按照W3C的标准解析渲染页面，这样一来，你的页面在所有的浏览器里显示的就都是一个样子了。
   </pre>
 </details>
+
 
 
 
@@ -67,8 +68,6 @@ Q：BFC概念？作用？常用场景？
   <b>清除浮动</b>
   </pre>
 </details>
-
-
 [BFC的概念与应用场景](https://juejin.cn/post/6844903753074606094)
 
 
@@ -100,8 +99,6 @@ Q：Flex？注意flex：1的含义，一般会给你个场景题
 </details>
 
 
-
-
 Q：盒模型概念，如何切换盒模型？
 
 <details>
@@ -118,8 +115,6 @@ Q：盒模型概念，如何切换盒模型？
   box-sizing: border-box 是IE盒子模型。
   </pre>
 </details>
-
-
 [css的两种盒模型](https://www.jianshu.com/p/6640ef99ebff)
 
 
@@ -244,8 +239,6 @@ Q：var/let/const 区别？暂时性死区？块级作用域？const a = {}; a.x
 </details>
 
 
-
-
 Q：new操作符具体做了什么事情
 
 <details>
@@ -258,8 +251,6 @@ Q：new操作符具体做了什么事情
     4、对构造函数有返回值的判断
   </pre>
 </details>
-
-
 
 
 Q：箭头函数与普通函数的区别
@@ -335,13 +326,23 @@ Q：闭包概念，最主要的还是问闭包的场景？
 　　给对象设置私有属性并利用特权(Privileged)方法访问私有属性。
   </pre>
 </details>
-
-
 [JavaScript 里的闭包是什么？应用场景有哪些？](https://www.zhihu.com/question/19554716)
 
 
 
 Q：各种继承
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  ES5的继承是通过prototype或构造函数机制来实现。<b>ES5的继承实质上是先创建子类的实例对象，然后再将父类的方法添加到this上（Parent.apply(this)）。</b>
+ES6的继承机制完全不同，<b>实质上是先创建父类的实例对象this（所以必须先调用父类的super()方法），然后再用子类的构造函数修改this。</b>
+<br/>
+具体的：ES6通过class关键字定义类，里面有构造方法，类之间通过extends关键字实现继承。子类必须在constructor方法中调用super方法，否则新建实例报错。因为子类没有自己的this对象，而是继承了父类的this对象，然后对其进行加工。如果不调用super方法，子类得不到this对象。
+<br/>
+ps：super关键字指代父类的实例，即父类的this对象。在子类构造函数中，调用super后，才可使用this关键字，否则报错。
+  </pre>
+</details>
 
 [做完这48道题彻底弄懂JS继承](https://juejin.cn/post/6844904098941108232)
 
@@ -482,8 +483,6 @@ Q：谈谈React
 </details>
 
 
-
-
 Q：为什么React要用JSX？
 
 <details>
@@ -500,8 +499,6 @@ Q：为什么React要用JSX？
   </pre>
   <img src='https://s0.lgstatic.com/i/image/M00/73/A4/Ciqc1F_GJSSAU6odAAFLeX8UyTo307.png'/>
 </details>
-
-
 
 
 Q：生命周期详细描述一下？官方为什么改变？如何避免生命周期中的坑？
@@ -523,8 +520,6 @@ Q：生命周期详细描述一下？官方为什么改变？如何避免生命�
     7、如果没有添加错误边界处理，当渲染发生异常时，用户将会看到一个无法操作的白屏，所以一定要添加。
   </pre>
 </details>
-
-
 [React v16.3之后的组件生命周期函数](https://zhuanlan.zhihu.com/p/38030418)
 
 [我对 React V16.4 生命周期的理解](https://zhuanlan.zhihu.com/p/150929928)
@@ -560,8 +555,6 @@ Q：如何设计React组件？
   从工程实践而言，通过文件夹划分的方式切分代码。我初步常用的分割方式是将页面单独建立一个目录，将复用性略高的 components 建立一个目录，在下面分别建立 basic、container 和 hoc 三类。这样可以保证无法复用的业务逻辑代码尽量留在 Page 中，而可以抽象复用的部分放入 components 中。其中 basic 文件夹放展示组件，由于展示组件本身与业务关联性较低，所以可以使用 Storybook 进行组件的开发管理，提升项目的工程化管理能力。
   </pre>
 </details>
-
-
 
 
 Q：说说你对虚拟DOM的理解？直接全量更新和diff哪个快（这个问题要分情况）？
@@ -610,8 +603,6 @@ Q：与其他框架相比，React 的 diff 算法有何不同？
 </details>
 
 
-
-
 Q：什么是HOC？React里面用过哪些？
 
 <details>
@@ -625,8 +616,6 @@ Q：什么是HOC？React里面用过哪些？
 	Props 控制
   </pre>
 </details>
-
-
 
 
 Q：如何面向组件跨层级通信？
@@ -647,8 +636,6 @@ Q：如何面向组件跨层级通信？
   <img src='https://s0.lgstatic.com/i/image/M00/8A/F2/Ciqc1F_bAvqAGCQcAAC9M-t_bsw991.png'/>
   </pre>
 </details>
-
-
 
 
 Q：列举一种你了解的 React 状态管理框架
@@ -675,8 +662,6 @@ Q：列举一种你了解的 React 状态管理框架
 </details>
 
 
-
-
 Q：如何解释 React 的渲染流程？
 
 <details>
@@ -701,8 +686,6 @@ Q：如何解释 React 的渲染流程？
 </details>
 
 
-
-
 Q：React 的渲染异常会造成什么后果？
 
 <details>
@@ -718,8 +701,6 @@ Q：React 的渲染异常会造成什么后果？
   <img src='https://s0.lgstatic.com/i/image/M00/8C/C6/CgqCHl_0BcmAdxv4AAGsUAUv0QQ275.png'/>
   </pre>
 </details>
-
-
 
 
 Q：Fiber干了什么事情？requestIdleCallback了解多少？
@@ -756,8 +737,6 @@ Q：如何避免重复渲染？
 </details>
 
 
-
-
 Q：如何提升 React 代码可维护性？
 
 <details>
@@ -772,8 +751,6 @@ Q：如何提升 React 代码可维护性？
   <img src='https://s0.lgstatic.com/i/image2/M01/05/DD/Cip5yGABPJ-AX7tWAAGZ3QevoI0417.png'/>
   </pre>
 </details>
-
-
 
 
 Q：hooks出现的意义？类组件和函数组件之间的区别是什么？
@@ -818,8 +795,6 @@ Q：hooks的限制条件？
 </details>
 
 
-
-
 Q：谈谈hooks的设计模式？
 
 <details>
@@ -837,8 +812,6 @@ Q：谈谈hooks的设计模式？
 </details>
 
 
-
-
 Q：useEffect 与 useLayoutEffect 区别在哪里？
 
 <details>
@@ -850,8 +823,6 @@ Q：useEffect 与 useLayoutEffect 区别在哪里？
   <img src='https://s0.lgstatic.com/i/image2/M01/08/32/Cip5yGAKhRCAX99HAAD0YKYP40c980.png'/>
   </pre>
 </details>
-
-
 
 
 Q：为什么不要在循环、条件语句或者嵌套函数中调用hooks？记住官网的一句话，Not Magic, just Arrays
@@ -872,6 +843,9 @@ Q：setState 同步还是异步？比较常问，问的可能也比较深入
 	1、保持内部一致性。如果将 state 改为同步更新，那尽管 state 的更新是同步的，但是 props 不是。
 	2、启用并发更新，完成异步渲染。
 	<img src='https://s0.lgstatic.com/i/image2/M01/01/3E/CgpVE1_YU2KAStLdAAFVKxh7Dyg317.png'/>
+	<br/>
+	在React中，<b>如果是由React引发的事件处理（比如通过onClick引发的事件处理），调用setState不会同步更新this.state，除此之外的setState调用会同步执行this.state。</b>所谓“除此之外”，指的是绕过React通过addEventListener直接添加的事件处理函数，还有通过setTimeout/setInterval产生的异步调用。
+**原因：**在React的setState函数实现中，会根据一个变量isBatchingUpdates判断是直接更新this.state还是放到队列中回头再说，而isBatchingUpdates默认是false，也就表示setState会同步更新this.state，但是，<b>有一个函数batchedUpdates，这个函数会把isBatchingUpdates修改为true，而当React在调用事件处理函数之前就会调用这个batchedUpdates，造成的后果，就是由React控制的事件处理过程setState不会同步更新this.state</b>。
   </pre>
 </details>
 
@@ -921,6 +895,27 @@ UDP是一个面向无连接的传输层协议。
 TCP确保传输可靠性的方式有：校验和、序列号、确认应答、超时重传、连接管理、流量控制、拥塞控制。
   </pre>
 </details>
+
+
+Q：TCP三次握手和四次挥手
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  三次握手之所以是三次是保证client和server均让对方知道自己的接收和发送能力没问题而保证的最小次数。
+  <br/>
+  第一次client => server 只能server判断出client具备发送能力 第二次 server => client client就可以判断出server具备发送和接受能力。此时client还需让server知道自己接收能力没问题于是就有了第三次 第三次 client => server 双方均保证了自己的接收和发送能力没有问题
+  <br/>
+  其中，为了保证后续的握手是为了应答上一个握手，每次握手都会带一个标识 seq，后续的ACK都会对这个seq进行加一来进行确认。
+  <br/>
+  挥手四次是因为TCP是全双工通信的
+  （1）第一次挥手：因此当主动方发送断开连接的请求（即FIN报文）给被动方时，仅仅代表主动方不会再发送数据报文了，但主动方仍可以接收数据报文。    
+  （2）第二次挥手：被动方此时有可能还有相应的数据报文需要发送，因此需要先发送ACK报文，告知主动方“我知道你想断开连接的请求了”。这样主动方便不会因为没有收到应答而继续发送断开连接的请求（即FIN报文）。   
+  （3）第三次挥手：被动方在处理完数据报文后，便发送给主动方FIN报文；这样可以保证数据通信正常可靠地完成。发送完FIN报文后，被动方进入LAST_ACK阶段（超时等待）。   
+  （4）第四次挥手：如果主动方及时发送ACK报文进行连接中断的确认，这时被动方就直接释放连接，进入可用状态。
+  </pre>
+</details>
+
 
 
 
@@ -974,6 +969,17 @@ Q：cookie与localStorage、sessionStorage的区别
 </details>
 
 
+Q：fetch发送2次请求的原因
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+fetch会发送两次请求原因是fetch导致的，普通的post请求（如原生ajax）不会，只会发送一次。 fetch发送的第一次请求时option类型的请求，这个请求主要是用来询问服务器是否允许修改header头等一些操作，如果允许会返回204，然后再发送真正的post请求拿回数据。 但注意的是：这第一次请求不是一直触发的：而是在第一次去修改header头时触发的
+  </pre>
+</details>
+
+
+
 
 Q：什么是跨域？什么情况下会跨域？浏览器根据什么字段判断是否允许跨域？跨域的解决方案有哪些？options请求了解过吗？说说CORS中的简单请求和复杂请求？form表单提交会跨域吗？
 
@@ -991,7 +997,6 @@ Q：什么是跨域？什么情况下会跨域？浏览器根据什么字段判�
   <img src='https://i.loli.net/2021/05/22/zO73bBlwgr5QeCq.png'/>
   </pre>
 </details>
-
 [跨域资源共享 CORS 详解](https://www.ruanyifeng.com/blog/2016/04/cors.html)
 
 [前端常见跨域解决方案（全）](https://segmentfault.com/a/1190000011145364)
@@ -999,6 +1004,15 @@ Q：什么是跨域？什么情况下会跨域？浏览器根据什么字段判�
 
 
 Q：讲一讲浏览器事件循环Event Loop？node 事件循环描述一下？
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  其中一个主要的区别在于浏览器的event loop 和nodejs的event loop 在处理异步事件的顺序是不同的,nodejs中有micro event;其中Promise属于micro event 该异步事件的处理顺序就和浏览器不同.nodejs V11.0以上 这两者之间的顺序就相同了.
+  node11以下版本的执行结果(先执行所有的宏任务，再执行微任务)
+  node11及浏览器的执行结果(顺序执行宏任务和微任务)
+  </pre>
+</details>
 
 [详解JavaScript中的Event Loop（事件循环）机制](https://zhuanlan.zhihu.com/p/33058983)
 
@@ -1019,6 +1033,39 @@ Q：从输入 URL 到页面加载完成的过程，一般要很详细的描述�
 
 
 Q：https加密原理？主要是讲对称加密和非对此加密结合使用的一个过程。什么是中间人攻击？和http区别？
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  1、首先什么是HTTP协议?
+  http协议是超文本传输协议，位于tcp/ip四层模型中的应用层；通过请求/响应的方式在客户端和服务器之间进行通信；但是缺少安全性，http协议信息传输是通过明文的方式传输，不做任何加密，相当于在网络上裸奔；容易被中间人恶意篡改，这种行为叫做中间人攻击；
+  2、加密通信：
+  为了安全性，双方可以使用对称加密的方式key进行信息交流，但是这种方式对称加密秘钥也会被拦截，也不够安全，进而还是存在被中间人攻击风险；于是人们又想出来另外一种方式，使用非对称加密的方式；使用公钥/私钥加解密；通信方A发起通信并携带自己的公钥，接收方B通过公钥来加密对称秘钥；然后发送给发起方A；A通过私钥解密；双发接下来通过对称秘钥来进行加密通信；但是这种方式还是会存在一种安全性；中间人虽然不知道发起方A的私钥，但是可以做到偷天换日，将拦截发起方的公钥key1;并将自己生成的一对公/私钥的公钥发送给B；接收方B并不知道公钥已经被偷偷换过；按照之前的流程，B通过公钥加密自己生成的对称加密秘钥key2;发送给A；这次通信再次被中间人拦截，尽管后面的通信，两者还是用key2通信，但是中间人已经掌握了Key2;可以进行轻松的加解密；还是存在被中间人攻击风险；
+  3、解决困境：权威的证书颁发机构CA来解决；
+  (1)、制作证书：作为服务端的A，首先把自己的公钥key1发给证书颁发机构，向证书颁发机构进行申请证书；证书颁发机构有一套自己的公私钥，CA通过自己的私钥来加密key1,并且通过服务端网址等信息生成一个证书签名，证书签名同样使用机构的私钥进行加密；制作完成后，机构将证书发给A；
+  (2)、校验证书真伪：当B向服务端A发起请求通信的时候，A不再直接返回自己的公钥，而是返回一个证书；
+  说明：各大浏览器和操作系统已经维护了所有的权威证书机构的名称和公钥。B只需要知道是哪个权威机构发的证书，使用对应的机构公钥，就可以解密出证书签名；接下来，B使用同样的规则，生成自己的证书签名，如果两个签名是一致的，说明证书是有效的；签名验证成功后，B就可以再次利用机构的公钥，解密出A的公钥key1;接下来的操作，就是和之前一样的流程了；
+  4、中间人是否会拦截发送假证书到B呢？
+  因为证书的签名是由服务器端网址等信息生成的，并且通过第三方机构的私钥加密中间人无法篡改；所以最关键的问题是证书签名的真伪；
+  5、https主要的思想是在http基础上增加了ssl安全层，即以上认证过程；
+  <br/>
+  http和https区别：
+  1、Https协议需要ca证书，费用较高。
+  2、http是超文本传输协议，信息是明文传输，https则是具有安全性的ssl加密传输协议。
+  3、使用不同的链接方式，端口也不同，一般而言，http协议的端口为80，https的端口为443
+  4、http的连接很简单，是无状态的；HTTPS协议是由SSL+HTTP协议构建的可进行加密传输、身份认证的网络协议，比http协议安全。
+	<br/>
+	中间人攻击过程如下：
+  1、服务器向客户端发送公钥。
+  2、攻击者截获公钥，保留在自己手上。
+  3、然后攻击者自己生成一个【伪造的】公钥，发给客户端。
+  4、客户端收到伪造的公钥后，生成加密hash值发给服务器。
+  5、攻击者获得加密hash值，用自己的私钥解密获得真秘钥。
+  6、同时生成假的加密hash值，发给服务器。
+  7、服务器用私钥解密获得假秘钥。
+  8、服务器用加秘钥加密传输信息
+  </pre>
+</details>
 
 [彻底搞懂HTTPS的加密原理](https://zhuanlan.zhihu.com/p/43789231)
 
@@ -1101,8 +1148,14 @@ Q：token如何使用
 </details>
 
 
-
 Q：requestAnimationFrame 与 requestIdleCallback 含义及区别
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  	<img src='https://user-images.githubusercontent.com/1249423/42104778-74e0cea2-7c00-11e8-8877-0e3713f4a431.png'/>
+  </pre>
+</details>
 
 [requestAnimationFrame 与 requestIdleCallback 含义及区别](https://juejin.cn/post/6844904018200756238)
 
@@ -1123,7 +1176,6 @@ Q：http 状态码301、302、303、307、308 的区别
   307不允许浏览器修改请求方法。
   </pre>
 </details>
-
 [http 状态码301、302、303、307、308 的区别](https://juejin.cn/post/6844904129760870414)
 
 
@@ -1146,8 +1198,6 @@ Q：node常用的一些模块，fs/path/http等等
   zlib，压缩
   </pre>
 </details>
-
-
 [nodeJs常用的内置模块](https://blog.csdn.net/Charissa2017/article/details/104951488)
 
 
