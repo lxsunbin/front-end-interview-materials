@@ -587,8 +587,6 @@ Q：说说你对虚拟DOM的理解？直接全量更新和diff哪个快（这个
   <img src='https://s0.lgstatic.com/i/image/M00/8C/05/Ciqc1F_kXCaAJS7GAACbWvarErs717.png'/>
   </pre>
 </details>
-
-
 [网上都说操作真实 DOM 慢，但测试结果却比 React 更快，为什么？](https://www.zhihu.com/question/31809713)
 
 
@@ -716,6 +714,17 @@ Q：React 的渲染异常会造成什么后果？
 
 
 Q：Fiber干了什么事情？requestIdleCallback了解多少？
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  Fiber：React内部实现的一套状态更新机制。支持任务不同优先级，可中断与恢复，并且恢复后可以复用之前的中间状态。其中每个任务更新单元为React Element对应的Fiber节点。
+  Fiber包含三层含义：
+  1、作为架构来说，之前React15的Reconciler采用递归的方式执行，数据保存在递归调用栈中，所以被称为stack Reconciler。React16的Reconciler基于Fiber节点实现，被称为Fiber Reconciler。
+  2、作为静态的数据结构来说，每个Fiber节点对应一个React element，保存了该组件的类型（函数组件/类组件/原生组件...）、对应的DOM节点等信息。
+  3、作为动态的工作单元来说，每个Fiber节点保存了本次更新中该组件改变的状态、要执行的工作（需要被删除/被插入页面中/被更新...）。
+  </pre>
+</details>
 
 [React Fiber是什么](https://zhuanlan.zhihu.com/p/26027085)
 
