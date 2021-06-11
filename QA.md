@@ -20,8 +20,6 @@ CSS1Compat：标准模式，浏览器使用W3C的标准解析渲染页面。
 </details>
 
 
-
-
 Q：link和@import的区别有哪些
 
 <details>
@@ -938,8 +936,6 @@ Q：TCP三次握手和四次挥手
 </details>
 
 
-
-
 Q：WebSocket原理，和http的区别
 
 <details>
@@ -1000,8 +996,6 @@ fetch会发送两次请求原因是fetch导致的，普通的post请求（如原
 </details>
 
 
-
-
 Q：什么是跨域？什么情况下会跨域？浏览器根据什么字段判断是否允许跨域？跨域的解决方案有哪些？options请求了解过吗？说说CORS中的简单请求和复杂请求？form表单提交会跨域吗？
 
 <details>
@@ -1048,6 +1042,26 @@ Q：http2有哪些新特性？http2还有哪些缺陷？http3的一些了解？
 
 
 Q：从输入 URL 到页面加载完成的过程，一般要很详细的描述：包括DNS查询，缓存查询，3次握手，4次挥手，浏览器渲染进程等，面试官会从里面再挑几个问题深入问，比如为什么是3次握手4次挥手？渲染进程中的GUI渲染线程、JS引擎线程、事件触发线程等等？可能会问到进程线程的区别？浏览器为什么是多进程？js为什么是单线程？怎么支持多线程？
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+ 	<img src="https://i.loli.net/2021/06/11/EeI6WHMob5n9RJc.jpg" />
+  DNS 核心系统是一个三层的树状，分布式结构，基本对应域名结构:
+  1、根域名服务器（Root DNS Server）: 返回「com」,「cn」,「net」等顶级域名服务器的 IP 地址；
+  2、顶级域名服务器（Top-level DNS Server）：管理各自域名下的权威域名服务器，比如 com 顶级域名服务器可以返回 apple.com 域名服务器的 IP 地址；
+  3、权威域名服务器（Authoritative DNS Server）：管理自己域名下主机的 IP 地址，比如 apple.com 权威域名服务器可以返回 www.apple.com 的 IP 地址。
+  <img src="https://i.loli.net/2021/06/11/mV2XY6yshp7SCR1.jpg" />
+  DNS 的完整解析流程如下:
+  <img src="https://i.loli.net/2021/06/11/K352ZqMdAPpuING.jpg" />
+  1、浏览器中输入 www.example.com 后，会先查看 浏览器的 DNS 缓存是否过期，未过期直接取缓存的，已过期会继续请求操作系统的缓存（/etc/hosts 文件等），还未找到，进入步骤 2;
+  2、请求本地地址配置的 DNS resolver（非权威域名服务器），一般由用户的 Internet 服务提供商 (ISP) 进行管理，例如有线 Internet 服务提供商、DSL 宽带提供商或公司网，MAC 的同学可以打开网络配置中的 DNS Servers 来看下默认 ISP 提供的域名服务器（如果想用其他的非权威域名服务器，填入即可，这样就会覆盖 ISP 提供的默认地址）；
+  3、DNS resolver 将 www.example.com 的请求转发到 DNS 根名称服务器, 根服务器返回「.com」顶级域名服务器地址；
+  4、DNS resolver 再次转发 www.example.com 的请求，这次转发到步骤三获取到的 .com 域的一个 TLD 名称服务器。.com 域的名称服务器使用与 example.com 域相关的四个 Amazon Route 53 名称服务器的名称来响应该请求；
+  5、Amazon Route 53 名称服务器在 example.com 托管区域中查找 www.example.com 记录，获得相关值，例如，Web 服务器的 IP 地址 (192.0.2.44)，并将 IP 地址返回至 DNS 解析程序。
+  6、DNS resolver 最终获得用户需要的 IP 地址。解析程序将此值返回至 Web 浏览器。DNS 解析程序还会将 example.com 的 IP 地址缓存 (存储) 您指定的时长，以便它能够在下次有人浏览 example.com 时更快地作出响应。
+  </pre>
+</details>
 
 [从输入URL到页面加载的过程？如何由一道题完善自己的前端知识体系！](https://zhuanlan.zhihu.com/p/34453198)
 
