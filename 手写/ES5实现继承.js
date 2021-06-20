@@ -11,7 +11,7 @@ Parent.prototype.say = function () {
 function Child(age) {
 	this.age = age;
 }
-Child.prototype = new Parent('parent');
+Child.prototype = new Parent();
 
 /**
  * @description: 构造函数继承

@@ -8,3 +8,14 @@
 // 	console.log(res);
 // });
 // console.log(Object.prototype.toString.call(Promise.resolve('foo')));
+
+const test = () =>
+	new Promise((resolve, reject) => {
+		resolve(1);
+		// reject(1)
+	});
+const fn = async () => {
+	const res = await test();
+	console.log(res);
+};
+fn();
