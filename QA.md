@@ -20,6 +20,19 @@ CSS1Compat：标准模式，浏览器使用W3C的标准解析渲染页面。
 </details>
 
 
+Q：什么是语义化标签
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  1. 语义化标签就是让页面的内容结构化，便于浏览器和搜索引擎的进行分析，
+  2. 在没有css的时候，也能以一种文档格式显示，便于阅读。
+  3. 搜索引擎的爬虫依赖于标记确认上下文和各个关键字权重,有利于SEO.
+  </pre>
+</details>
+
+
+
 Q：link和@import的区别有哪些
 
 <details>
@@ -35,6 +48,22 @@ Q：link和@import的区别有哪些
   	可以通过 JS 操作 DOM ，插入link标签来改变样式；由于 DOM 方法是基于文档的，无法使用@import的方式插入样式。
   </pre>
 </details>
+
+
+Q：页面渲染html的过程？
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  1.浏览器解析html源码，然后创建一个 DOM树。并行请求 css/image/js在DOM树中，每一个HTML标签都有一个对应的节点，并且每一个文本也都会有一个对应的文本节点。DOM树的根节点就是 documentElement，对应的是html标签。
+  2.浏览器解析CSS代码，计算出最终的样式数据。构建CSSOM树。对CSS代码中非法的语法它会直接忽略掉。解析CSS的时候会按照如下顺序来定义优先级：<b>浏览器默认设置 < 用户设置 < 外链样式 < 内联样式 < html中的style</b>。
+  3.DOM Tree + CSSOM --> 渲染树（rendering tree）。渲染树和DOM树有点像，但是是有区别的。
+  DOM树完全和html标签一一对应，但是渲染树会忽略掉不需要渲染的元素，比如head、display:none的元素等。而且一大段文本中的每一个行在渲染树中都是独立的一个节点。渲染树中的每一个节点都存储有对应的css属性。
+  4.一旦渲染树创建好了，浏览器就可以根据渲染树直接把页面绘制到屏幕上。
+  以上四个步骤并不是一次性顺序完成的。如果DOM或者CSSOM被修改，以上过程会被重复执行。实际上，CSS和JavaScript往往会多次修改DOM或者CSSOM。
+  </pre>
+</details>
+
 
 
 
@@ -57,15 +86,17 @@ Q：BFC概念？作用？常用场景？
   <b>根元素，即HTML元素</b>
   <b>float的值不为none</b>
   <b>overflow的值不为visible</b>
-  <b>display的值为inline-block、table-cell、table-caption</b>
+  <b>display的值为inline-block、table-cell、table-caption、flex</b>
   <b>position的值为absolute或fixed</b>
   <br/>
   应用场景：
   <b>防止margin发生重叠</b>
-  <b>自适应2栏布局</b>
+  <b>浮动环绕文字问题</b>
   <b>清除浮动</b>
+  <b>盒子塌陷问题</b>
   </pre>
 </details>
+
 [BFC的概念与应用场景](https://juejin.cn/post/6844903753074606094)
 
 
@@ -110,9 +141,10 @@ Q：盒模型概念，如何切换盒模型？
   <br/>
   切换盒模型：
   box-sizing: content-box 是W3C盒子模型;（默认）
-  box-sizing: border-box 是IE盒子模型。
+  box-sizing: border-box 是IE盒子模型。(推荐。固定到border控制宽高，不用重新计算padding和border)
   </pre>
 </details>
+
 [css的两种盒模型](https://www.jianshu.com/p/6640ef99ebff)
 
 
@@ -178,6 +210,45 @@ Q：讲讲js数据类型？基本和引用的区别？Symbol和BigInt讲一讲�
 
 
 
+Q：说一下原型,原型链
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  每个对象都有一个<font color=red>__proto__</font>属性，并且指向它的<font color=red>prototype</font>原型对象；
+  每个构造函数都有一个<font color=red>prototype</font>原型对象；
+  <font color=red>prototype</font>原型对象里的<font color=red>constructor</font>指向构造函数本身。
+  <b>原型:</b>
+  在声明定义函数时，函数都会有一个<font color=red>prototype</font>属性，这个属性就是一个指针，指向一个对象，而这个对象就是原型对象（简称原型）。通过构造函数创建的实例对象，可以直接访问到构造函数的prototype属性上（即原型对象）的属性和方法
+  <b>原型链:</b>
+  每个对象都有一个<font color=red>__proto__</font>，它指向它的<font color=red>prototype</font>原型对象，而<font color=red>prototype</font>原型对象又具有一个自己的<font color=red>prototype</font>原型对象，就这样层层往上直到一个对象的原型<font color=red>prototype</font>为<font color=red>null</font>, 这个查询的路径就是<font color=red>原型链</font>。
+  <b>原型链可以将公用属性存放在同一原型层中，实现继承、节省内存空间等。</b>
+  当您访问实例的属性时，JavaScript 首先会检查它们是否直接存在于该对象上，如果不存在，则会 [[Prototype]] 中查找。这意味着你在 prototype 中定义的所有内容都可以由所有实例有效共享，你甚至可以稍后更改部分 prototype，并在所有现有实例中显示更改（如果需要）。
+  </pre>
+</details>
+
+
+
+Q：各种继承
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  <b>继承</b>是一种允许我们在已有类的基础上创建新类的机制；它为子类提供了灵活性，可以重用父类的方法和变量。子类可以使用父类的所有功能，并且对这些功能进行扩展。
+  <br/>
+  ES5的继承是通过prototype或构造函数机制来实现。<b>ES5的继承实质上是先创建子类的实例对象，然后再将父类的方法添加到this上（Parent.apply(this)）。</b>
+ES6的继承机制完全不同，<b>实质上是先创建父类的实例对象this（所以必须先调用父类的super()方法），然后再用子类的构造函数修改this。</b>
+<br/>
+具体的：ES6通过class关键字定义类，里面有构造方法，类之间通过extends关键字实现继承。子类必须在constructor方法中调用super方法，否则新建实例报错。因为子类没有自己的this对象，而是继承了父类的this对象，然后对其进行加工。如果不调用super方法，子类得不到this对象。
+<br/>
+ps：super关键字指代父类的实例，即父类的this对象。在子类构造函数中，调用super后，才可使用this关键字，否则报错。
+  </pre>
+</details>
+
+[做完这48道题彻底弄懂JS继承](https://juejin.cn/post/6844904098941108232)
+
+
+
 Q：判断数据类型的方法？instanceof原理?判断空对象？typof null？typeof NaN？
 
 <details>
@@ -207,7 +278,6 @@ JS中所有的构造器Number,Array,Function等都会继承并重写这个方法
   isNaN：判断是否非数值
   </pre>
 </details>
-
 [JS的5种数据类型判断方法及原理超详解](https://blog.csdn.net/jian_zi/article/details/102650279)
 
 [JavaScript 用七种方式教你判断一个变量是否为数组类型](https://lpyexplore.gitee.io/blog/blogs/frontend/js/sevenThisIsArray.html)
@@ -337,24 +407,6 @@ Q：闭包概念，最主要的还是问闭包的场景？
   </pre>
 </details>
 [JavaScript 里的闭包是什么？应用场景有哪些？](https://www.zhihu.com/question/19554716)
-
-
-
-Q：各种继承
-
-<details>
-  <summary>点击查看</summary>
-  <pre>
-  ES5的继承是通过prototype或构造函数机制来实现。<b>ES5的继承实质上是先创建子类的实例对象，然后再将父类的方法添加到this上（Parent.apply(this)）。</b>
-ES6的继承机制完全不同，<b>实质上是先创建父类的实例对象this（所以必须先调用父类的super()方法），然后再用子类的构造函数修改this。</b>
-<br/>
-具体的：ES6通过class关键字定义类，里面有构造方法，类之间通过extends关键字实现继承。子类必须在constructor方法中调用super方法，否则新建实例报错。因为子类没有自己的this对象，而是继承了父类的this对象，然后对其进行加工。如果不调用super方法，子类得不到this对象。
-<br/>
-ps：super关键字指代父类的实例，即父类的this对象。在子类构造函数中，调用super后，才可使用this关键字，否则报错。
-  </pre>
-</details>
-
-[做完这48道题彻底弄懂JS继承](https://juejin.cn/post/6844904098941108232)
 
 
 
@@ -509,6 +561,23 @@ Q：为什么React要用JSX？
   </pre>
   <img src='https://s0.lgstatic.com/i/image/M00/73/A4/Ciqc1F_GJSSAU6odAAFLeX8UyTo307.png'/>
 </details>
+
+
+Q：事件机制、冒泡
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  我们在jsx中指定的事件处理函数，其实并不会被绑定到对应的DOM元素上。而是都被委托到了更高层的元素上，就像事件委托那样。在React16中，这个更高层的元素就是document（React17是rootNode）。
+  当我们在页面中触发原生事件时，原生事件会沿着DOM树先冒泡到document，然后React会找出触发事件的组件，并让React合成事件在组件树中冒泡并触发对应的事件处理函数。
+也就是说：原生事件的冒泡和React合成事件的冒泡是<b>两个过程</b>，React合成事件的冒泡在原生事件冒泡到document之后才开始。通过jsx指定的事件处理函数会在React合成事件冒泡的过程中被触发。而直接绑定在DOM元素上的事件处理函数会在原生事件冒泡的过程中被触发。
+	react 事件注册过程其实主要做了2件事：<b>事件注册</b>、<b>事件存储</b>。
+	1、事件注册 - 组件挂载阶段，根据组件内的声明的事件类型-onclick，onchange 等，给 document 上添加事件 -addEventListener，并指定统一的事件处理程序 dispatchEvent。
+	2、事件存储 - 就是把 react 组件内的所有事件统一的存放到一个对象里，缓存起来，为了在触发事件的时候可以查找到对应的方法去执行。
+	<img src="https://img.toutiao.io/c/98797606d8847b0919021ee6e9bd3af9"/>
+  </pre>
+</details>
+
 
 
 Q：生命周期详细描述一下？官方为什么改变？如何避免生命周期中的坑？
@@ -1038,6 +1107,7 @@ Q：什么是跨域？什么情况下会跨域？浏览器根据什么字段判�
 <details>
   <summary>点击查看</summary>
   <pre>
+  浏览器的同源策略会导致跨域。 同源策略是指同一<b>协议</b>、<b>域名</b>、<b>端口</b>。
   form表单提交不存在跨域。因为原页面用 form 提交到另一个域名之后，原页面的脚本无法获取新页面中的内容。所以浏览器认为这是安全的。
   <br/>
   1、JSONP：在html中使用script标签获取外部资源，实现跨域
@@ -1049,6 +1119,7 @@ Q：什么是跨域？什么情况下会跨域？浏览器根据什么字段判�
   <img src='https://i.loli.net/2021/05/22/zO73bBlwgr5QeCq.png'/>
   </pre>
 </details>
+
 [跨域资源共享 CORS 详解](https://www.ruanyifeng.com/blog/2016/04/cors.html)
 
 [前端常见跨域解决方案（全）](https://segmentfault.com/a/1190000011145364)
@@ -1230,6 +1301,37 @@ Q：requestAnimationFrame 与 requestIdleCallback 含义及区别
 </details>
 
 [requestAnimationFrame 与 requestIdleCallback 含义及区别](https://juejin.cn/post/6844904018200756238)
+
+
+
+Q：你所知道的http的响应码及含义？
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  <b>1xx(临时响应)</b>
+  100：请求者应当继续提出请求。
+  101(切换协议)：请求者已要求服务器切换协议，服务器已确认并准备进行切换。
+  <b>2xx(成功)</b>
+  200：正确的请求返回正确的结果
+  201：表示资源被正确的创建。比如说，我们 POST 用户名、密码正确创建了一个用户就可以返回 201。
+  202：请求是正确的，但是结果正在处理中，这时候客户端可以通过轮询等机制继续请求。
+  <b>3xx(已重定向)</b>
+  300：请求成功，但结果有多种选择。
+  301：请求成功，但是资源被永久转移。
+  303：使用 GET 来访问新的地址来获取资源。
+  304：请求的资源并没有被修改过
+  <b>4xx(请求错误)</b>
+  400：请求出现错误，比如请求头不对等。
+  401：没有提供认证信息。请求的时候没有带上 Token 等。
+  402：为以后需要所保留的状态码。
+  403：请求的资源不允许访问。就是说没有权限。
+  404：请求的内容不存在。
+  <b>5xx(服务器错误)</b>
+  500：服务器错误。
+  501：请求还没有被实现。
+  </pre>
+</details>
 
 
 

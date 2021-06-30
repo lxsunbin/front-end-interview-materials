@@ -19,3 +19,5 @@ const fn = async () => {
 	console.log(res);
 };
 fn();
+var a=1
+console.log(a);
