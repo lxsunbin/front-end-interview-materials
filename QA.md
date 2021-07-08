@@ -1356,6 +1356,12 @@ Q：http 状态码301、302、303、307、308 的区别
 
 #### 五、其他
 
+Q：V8相关问题
+
+[“内存控制” 有十五问](https://mp.weixin.qq.com/s/VHk1OLggdnPcBO8AY30Cpw)
+
+
+
 Q：node常用的一些模块，fs/path/http等等
 
 <details>
