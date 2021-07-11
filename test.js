@@ -62,3 +62,16 @@ let rand = function (p) {
 	return selectPeople.n;
 };
 rand(peoples);
+
+a = '';
+var n = 0;
+console.log(a, global.a);
+Object.defineProperty(global, a, {
+	get() {
+		console.log(n);
+		return ++n;
+	}
+});
+if (a == 1 && a == 2 && a == 3) {
+	console.log(1);
+}

@@ -34,6 +34,9 @@ deepCopy(o, obj);
 // ---------------------------------------------------------------------------------
 
 function deepCopy(obj, cache = new WeakMap()) {
+	// 判断是否为Symbol
+	if (typeof obj === 'symbol') return Symbol.for(obj.description);
+
 	// 判断是否为引用类型
 	if (!obj instanceof Object) return obj;
 

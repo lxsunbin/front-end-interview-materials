@@ -976,8 +976,21 @@ Q：React-Router 的实现原理及工作方式分别是什么？
 </details>
 
 
-
 #### 四、Http && 浏览器
+
+Q：谈谈你对 dns-prefetch 的理解
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  1、DNS Prefetching是提前加载域名解析的，省去了解析时间。a标签的href是可以在chrome。firefox包括高版本的IE，但是在HTTPS下面不起作用，需要meta来强制开启功能
+  2、这是DNS的提前解析，并不是css，js之类的文件缓存，大家不要混淆了两个不同的概念。
+  3、如果直接做了js的重定向，或者在服务端做了重定向，没有在link里面手动设置，是不起作用的。
+  4、这个对于什么样的网站更有作用呢，类似taobao这种网站，你的网页引用了大量很多其他域名的资源，如果你的网站，基本所有的资源都在你本域名下，那么这个基本没有什么作用。因为DNS Chrome在访问你的网站就帮你缓存了。
+  </pre>
+</details>
+
+
 
 Q：HTTP和TCP的不同，TCP和UDP的区别
 
@@ -1209,8 +1222,9 @@ Q：https加密原理？主要是讲对称加密和非对此加密结合使用�
   8、服务器用加秘钥加密传输信息
   </pre>
 </details>
-
 [彻底搞懂HTTPS的加密原理](https://zhuanlan.zhihu.com/p/43789231)
+
+[20 张图彻底弄懂 HTTPS 的原理](https://mp.weixin.qq.com/s/tZ-i-OkxGJeyhjtSpRbiQw)
 
 
 
@@ -1245,10 +1259,15 @@ Q：说一下进程和线程
   个人理解：
   进程：在操作系统中，会根据每一个独立运行的程序分配资源，这些程序之间互不干扰，都只负责运行自己的代码。
   线程：在操作系统进行频繁创建销毁进程时，需要给进程频繁分配和收回资源，而时间和资源也便在此过程中消耗。但是随着计算机硬件的升级，内存大的多核心CPU的出现，能够对计算机内存资源根据需求进行合理调度，线程也逐渐取代了进程。
+	1.进程要分配一大部分的内存，而线程只需要分配一部分栈就可以了.
+	2.一个程序至少有一个进程,一个进程至少有一个线程.
+	3.进程是资源分配的最小单位，线程是程序执行的最小单位。
+	4.一个线程可以创建和撤销另一个线程，同一个进程中的多个线程之间可以并发执行.
   </pre>
   <img src='https://mmbiz.qpic.cn/mmbiz_png/83d3vL8fIicaLbdP0icWia9aMpmEQpgfNibdhmengREhDlJk1VHprOsIYmdzSRQe8ImAc3vRE8p5bz9GsAoZS1tvLw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1'/>
     <img src='https://mmbiz.qpic.cn/mmbiz_png/83d3vL8fIicaLbdP0icWia9aMpmEQpgfNibdnW0wfQCgJ9zIqefQJmZSAibIrIQSqUB2WO4HtacvcIib99PTZu1GVxCg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1'/>
 </details>
+
 
 
 
@@ -1498,4 +1517,36 @@ Q：Typescript 中的 interface 和 type 到底有什么区别
 [typescript 中的 interface 和 type 到底有什么区别](https://github.com/SunshowerC/blog/issues/7)
 
 
+
+Q：如何优化SPA应用的首屏加载速度慢的问题
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  1、将公用的JS库通过script标签外部引入，减小app.bundel的大小，让浏览器并行下载资源文件，提高下载速度；
+  2、在配置 路由时，页面和组件使用懒加载的方式引入，进一步缩小 app.bundel 的体积，在调用某个组件时再加载对应的js文件；
+  3、root中插入loading 或者 骨架屏 prerender-spa-plugin，提升用户体验；
+  4、如果在webview中的页面，可以进行页面预加载
+  5、独立打包异步组件公共 Bundle，以提高复用性&缓存命中率
+  6、静态文件本地缓存，有两种方式分别为HTTP缓存，设置Cache-Control，Last-Modified，Etag等响应头和Service Worker离线缓存
+  7、配合 PWA 使用
+  8、SSR
+  9、使用 Tree Shaking 减少业务代码体积 
+  </pre>
+</details>
+
+
+
+Q：Reflect 对象创建目的
+
+<details>
+	<summary>点击查看</summary>
+  <pre>
+  1、将 Object 对 象 的 一 些 明 显 属 于 语 言 内 部 的 方 法 （ 比 如 Object.defineProperty，放到 Reflect 对象上。
+  2、修改某些 Object 方法的返回结果，让其变得更合理。
+  3、让 Object 操作都变成函数行为。
+  4、Reflect 对象的方法与 Proxy 对象的方法一一对应，只要是 Proxy 对象 的方法，就能在 Reflect 对象上找到对应的方法。这就让 Proxy 对象可 以方便地调用对应的 Reflect 方法，完成默认行为，作为修改行为的基础。
+  也就是说，不管 Proxy 怎么修改默认行为，你总可以在 Reflect 上获取 默认行为。
+  </pre>
+</details>
 
