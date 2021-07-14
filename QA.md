@@ -189,7 +189,7 @@ Q：讲讲js数据类型？基本和引用的区别？Symbol和BigInt讲一讲�
    <br/>
   <b>null表示"没有对象"，即该处不应该有值。</b>
    1.作为函数的参数，表示该函数的参数不是对象。
-	 2.作为对象原型链的终点。
+   2.作为对象原型链的终点。
   <b>undefined表示"缺少值"，就是此处应该有一个值，但是还没有定义。</b>
    1.变量被声明了，但没有赋值时，就等于 undefined。
    2.调用函数时，应该提供的参数没有提供，该参数等于undefined。
@@ -207,6 +207,12 @@ Q：讲讲js数据类型？基本和引用的区别？Symbol和BigInt讲一讲�
 [一文说透 JS 中的数据类型](https://juejin.cn/post/6904593734168477710)
 
 [基本数据类型和引用类型的区别详解](https://segmentfault.com/a/1190000008472264)
+
+
+
+Q：js中栈和堆的概念和区别
+
+[js中栈和堆的概念和区别](https://juejin.cn/post/6854573215327617031)
 
 
 
@@ -492,7 +498,7 @@ Q：ES Module与 CommonJS 模块的差异？两者互相加载的方式？一般
   <b>ES Modules</b>：ES6 引入的模块化，支持import 来引入另一个 js 。
   import a from 'a';
   <b>UMD</b>：兼容AMD，CommonJS 模块化语法。
-<b>webpack(require.ensure)</b>：webpack 2.x 版本中的代码分割。
+  <b>webpack(require.ensure)</b>：webpack 2.x 版本中的代码分割。
   <br/>
   <b>commonjs与ES6的module还是有很大区别的：</b>
   1、两者的模块导入导出语法不同：commonjs是module.exports，exports导出，require导入；ES6则是export导出，import导入。
@@ -537,6 +543,22 @@ Q：class 的protected、 pravila和public
   3、protected 修饰的属性只能在当前类和当前类的子类中进行访问修改，受保护的属性，作用范围是当前类和子类的范围内
   </pre>
 </details>
+
+
+Q：class 定义类和 function 定义类的区别
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  1.class不存在变量提升，声明的class在它之前拿不到;
+  2.class类有static静态方法;
+  3.class必须用new调用，不能不能直接执行;
+  4.class类无法遍历它实例原型链上的属性和方法;
+  5.es5原型链定义了Father和Son，Son.__proto__ == Function.prototype
+  6.es6原型链中Son.__proto__ === Father
+  </pre>
+</details>
+
 
 
 
@@ -1447,6 +1469,8 @@ Q：http 状态码301、302、303、307、308 的区别
 Q：V8相关问题
 
 [“内存控制” 有十五问](https://mp.weixin.qq.com/s/VHk1OLggdnPcBO8AY30Cpw)
+
+[一文搞懂V8引擎的垃圾回收](https://segmentfault.com/a/1190000021231422)
 
 
 

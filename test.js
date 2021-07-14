@@ -75,3 +75,9 @@ Object.defineProperty(global, a, {
 if (a == 1 && a == 2 && a == 3) {
 	console.log(1);
 }
+
+for (var i = 0; i < 4; i++) {
+	setTimeout(i => {
+		console.log(i);
+	}, 100);
+}
