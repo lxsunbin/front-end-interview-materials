@@ -128,6 +128,17 @@ Q：Flex？注意flex：1的含义，一般会给你个场景题
 </details>
 
 
+Q：opacity、visibility、display 对比
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  	<img src='https://segmentfault.com/img/bVbbACL?w=855&h=317' />
+  </pre>
+</details>
+
+
+
 Q：盒模型概念，如何切换盒模型？
 
 <details>
@@ -1548,8 +1559,20 @@ Q：webpack设计理念
 </details>
 
 
-
 Q：webpack 构建流程？打包原理？
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  Webpack的运行流程是一个串行的过程，从启动到结束依次执行以下流程：
+  1、初始化：启动构建，读取与合并配置参数，加载 Plugin，实例化 Compiler。
+  2、编译：从 Entry 发出，针对每个 Module 串行调用对应的 Loader 去翻译文件内容，再找到该 Module 依赖的 Module，递归地进行编译处理。
+  3、输出：对编译后的 Module 组合成 Chunk，把 Chunk 转换成文件，输出到文件系统。
+  <img src='https://user-gold-cdn.xitu.io/2019/9/5/16d003a354ad6e96?imageView2/0/w/1280/h/960/format/webp/ignore-error/1' />
+  </pre>
+</details>
+
+
 
 [webpack打包原理 ? 看完这篇你就懂了 !](https://segmentfault.com/a/1190000021494964)
 
@@ -1588,6 +1611,8 @@ Q：webpack 热更新 原理
 
 
 Q：tree-shaking？对于 CommonJS，tree shaking怎么办？
+
+[Tree-Shaking的工作原理](https://cloud.tencent.com/developer/article/1624085)
 
 [浅谈 ES 模块和 Webpack Tree-shaking](https://zhuanlan.zhihu.com/p/43844419)
 
