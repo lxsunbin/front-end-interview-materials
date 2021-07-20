@@ -65,8 +65,6 @@ Q：页面渲染html的过程？
 </details>
 
 
-
-
 Q：水平垂直居中？兼容性？不知道宽高情况下？
 
 [CSS实现水平垂直居中的1010种方式（史上最全）](https://segmentfault.com/a/1190000016389031)
@@ -171,6 +169,12 @@ Q：伪类和伪元素区别？使用场景？
 [伪类与伪元素的区别及实战](https://juejin.cn/post/6844903761891213320)
 
 [CSS中伪类与伪元素，你弄懂了吗？](https://zhuanlan.zhihu.com/p/46909886)
+
+
+
+Q：深入理解圣杯布局和双飞翼布局
+
+[深入理解圣杯布局和双飞翼布局](https://juejin.cn/post/6844903817104850952)
 
 
 
@@ -378,8 +382,6 @@ Q：var/let/const 区别？暂时性死区？块级作用域？const a = {}; a.x
 </details>
 
 
-
-
 Q：说说你对函数式编程的理解？函数柯里化的理解？平时的使用场景？
 
 <details>
@@ -480,7 +482,6 @@ Q：说说对你对JavaScript异步编程的理解？
   <b>第四个阶段 - Async/Await</b>，Async/Await结合了Promise和Generator，在await后面跟一个Promise，它会自动等待Promise的决议值，解决了Generator需要手动控制next(...)执行的问题，真正实现了用同步的方式书写异步代码。
   </pre>
 </details>
-
 [JavaScript异步编程](https://segmentfault.com/a/1190000015711829)
 
 
@@ -513,7 +514,7 @@ Q：ES Module与 CommonJS 模块的差异？两者互相加载的方式？一般
   <br/>
   <b>commonjs与ES6的module还是有很大区别的：</b>
   1、两者的模块导入导出语法不同：commonjs是module.exports，exports导出，require导入；ES6则是export导出，import导入。
-  2、commonjs是运行时加载模块，ES6是在静态编译期间就确定模块的依赖。
+  2、commonjs是<b>执行时引入（动态引入）</b>，ES6是<b>编译时引入（静态引入，才能静态分析，实现<b>Tree-Shaking</b>）</b>。
   3、ES6在编译期间会将所有import提升到顶部，commonjs不会提升require。
   4、commonjs导出的是一个值拷贝，会对加载结果进行缓存，一旦内部再修改这个值，则不会同步到外部。ES6是导出的一个引用，内部修改可以同步到外部。
   5、两者的循环导入的实现原理不同，commonjs是当模块遇到循环加载时，返回的是当前已经执行的部分的值，而不是代码全部执行后的值，两者可能会有差异。所以，输入变量的时候，必须非常小心。ES6 模块是动态引用，如果使用import从一个模块加载变量（即import foo from 'foo'），那些变量不会被缓存，而是成为一个指向被加载模块的引用，需要开发者自己保证，真正取值的时候能够取到值。
@@ -527,6 +528,14 @@ Q：ES Module与 CommonJS 模块的差异？两者互相加载的方式？一般
 
 
 Q：defer和async的区别
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  defer：是在HTML解析完之后才会执行，如果是多个，按照加载的顺序依次执行。
+	async：是在加载完之后立即执行，如果是多个，执行顺序和加载顺序无关。
+  </pre>
+</details>
 
 [defer和async的区别](https://segmentfault.com/q/1010000000640869)
 
@@ -569,8 +578,6 @@ Q：class 定义类和 function 定义类的区别
   6.es6原型链中Son.__proto__ === Father
   </pre>
 </details>
-
-
 
 
 #### 三、[React](https://segmentfault.com/a/1190000018604138)
@@ -667,6 +674,28 @@ Q：调用 setState 之后发生了什么？
 </details>
 
 
+Q：setState 同步还是异步？比较常问，问的可能也比较深入
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  <b>setState 并非真异步，只是看上去像异步。</b>在源码中，通过 isBatchingUpdates 来判断 setState 是先存进 state 队列还是直接更新，如果值为 true 则执行异步操作，为 false 则直接更新。
+  那么什么情况下 isBatchingUpdates 会为 true 呢？在 React 可以控制的地方，就为 true，比如在 React 生命周期事件和合成事件中，都会走合并操作，延迟更新的策略。
+  但在 React 无法控制的地方，比如原生事件，具体就是在 addEventListener 、setTimeout、setInterval 等事件中，就只能同步更新。
+  一般认为，做异步设计是为了性能优化、减少渲染次数，React 团队还补充了两点。
+	1、保持内部一致性。如果将 state 改为同步更新，那尽管 state 的更新是同步的，但是 props 不是。
+	2、启用并发更新，完成异步渲染。
+	<img src='https://s0.lgstatic.com/i/image2/M01/01/3E/CgpVE1_YU2KAStLdAAFVKxh7Dyg317.png'/>
+	<br/>
+	在React中，<b>如果是由React引发的事件处理（比如通过onClick引发的事件处理），调用setState不会同步更新this.state，除此之外的setState调用会同步执行this.state。</b>所谓“除此之外”，指的是绕过React通过addEventListener直接添加的事件处理函数，还有通过setTimeout/setInterval产生的异步调用。
+**原因：**在React的setState函数实现中，会根据一个变量isBatchingUpdates判断是直接更新this.state还是放到队列中回头再说，而isBatchingUpdates默认是false，也就表示setState会同步更新this.state，但是，<b>有一个函数batchedUpdates，这个函数会把isBatchingUpdates修改为true，而当React在调用事件处理函数之前就会调用这个batchedUpdates，造成的后果，就是由React控制的事件处理过程setState不会同步更新this.state</b>。
+  </pre>
+</details>
+
+[setState是同步的还是异步的？](https://www.jianshu.com/p/ce39a08b585e)
+
+
+
 
 Q：如何设计React组件？
 
@@ -684,6 +713,8 @@ Q：如何设计React组件？
 
 Q：说说你对虚拟DOM的理解？直接全量更新和diff哪个快（这个问题要分情况）？
 
+
+
 <details>
   <summary>点击查看</summary>
   <pre>
@@ -700,7 +731,29 @@ Q：说说你对虚拟DOM的理解？直接全量更新和diff哪个快（这个
   <img src='https://s0.lgstatic.com/i/image/M00/8C/05/Ciqc1F_kXCaAJS7GAACbWvarErs717.png'/>
   </pre>
 </details>
+
 [网上都说操作真实 DOM 慢，但测试结果却比 React 更快，为什么？](https://www.zhihu.com/question/31809713)
+
+
+
+Q：Fiber干了什么事情？requestIdleCallback了解多少？
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  Fiber：React内部实现的一套状态更新机制。支持任务不同<b>优先级</b>，可中断与恢复，并且恢复后可以复用之前的<b>中间状态</b>。其中每个任务更新单元为React Element对应的Fiber节点。
+  Fiber包含三层含义：
+  1、作为架构来说，之前React15的Reconciler采用递归的方式执行，数据保存在递归调用栈中，所以被称为stack Reconciler。React16的Reconciler基于Fiber节点实现，被称为Fiber Reconciler。
+  2、作为静态的数据结构来说，每个Fiber节点对应一个React element，保存了该组件的类型（函数组件/类组件/原生组件...）、对应的DOM节点等信息。
+  3、作为动态的工作单元来说，每个Fiber节点保存了本次更新中该组件改变的状态、要执行的工作（需要被删除/被插入页面中/被更新...）。
+  </pre>
+</details>
+
+[React Fiber是什么](https://zhuanlan.zhihu.com/p/26027085)
+
+[React Fiber 原理介绍](https://segmentfault.com/a/1190000018250127)
+
+[你应该知道的requestIdleCallback](https://juejin.cn/post/6844903592831238157)
 
 
 
@@ -722,8 +775,10 @@ Q：与其他框架相比，React 的 diff 算法有何不同？
   然后进行横向比较，React 拥有完整的 Diff 算法策略，且拥有随时中断更新的时间切片能力，在大批量节点更新的极端情况下，拥有更友好的交互体验。
   Preact 可以在一些对性能要求不高，仅需要渲染框架的简单场景下应用。
   Vue 的整体 diff 策略与 React 对齐，虽然缺乏时间切片能力，但这并不意味着 Vue 的性能更差，因为在 Vue 3 初期引入过，后期因为收益不高移除掉了。除了高帧率动画，在 Vue 中其他的场景几乎都可以使用防抖和节流去提高响应性能。
+  <img src='https://s0.lgstatic.com/i/image2/M01/04/31/CgpVE1_q2zGAe9UzAACKAZViwbM237.png' />
   </pre>
 </details>
+
 
 
 Q：什么是HOC？React里面用过哪些？
@@ -824,26 +879,7 @@ Q：React 的渲染异常会造成什么后果？
   <img src='https://s0.lgstatic.com/i/image/M00/8C/C6/CgqCHl_0BcmAdxv4AAGsUAUv0QQ275.png'/>
   </pre>
 </details>
-
-
-Q：Fiber干了什么事情？requestIdleCallback了解多少？
-
-<details>
-  <summary>点击查看</summary>
-  <pre>
-  Fiber：React内部实现的一套状态更新机制。支持任务不同优先级，可中断与恢复，并且恢复后可以复用之前的中间状态。其中每个任务更新单元为React Element对应的Fiber节点。
-  Fiber包含三层含义：
-  1、作为架构来说，之前React15的Reconciler采用递归的方式执行，数据保存在递归调用栈中，所以被称为stack Reconciler。React16的Reconciler基于Fiber节点实现，被称为Fiber Reconciler。
-  2、作为静态的数据结构来说，每个Fiber节点对应一个React element，保存了该组件的类型（函数组件/类组件/原生组件...）、对应的DOM节点等信息。
-  3、作为动态的工作单元来说，每个Fiber节点保存了本次更新中该组件改变的状态、要执行的工作（需要被删除/被插入页面中/被更新...）。
-  </pre>
-</details>
-
-[React Fiber是什么](https://zhuanlan.zhihu.com/p/26027085)
-
-[React Fiber 原理介绍](https://segmentfault.com/a/1190000018250127)
-
-[你应该知道的requestIdleCallback](https://juejin.cn/post/6844903592831238157)
+[错误边界](https://zh-hans.reactjs.org/docs/error-boundaries.html)
 
 
 
@@ -965,27 +1001,6 @@ Q：为什么不要在循环、条件语句或者嵌套函数中调用hooks？�
 
 
 
-Q：setState 同步还是异步？比较常问，问的可能也比较深入
-
-<details>
-  <summary>点击查看</summary>
-  <pre>
-  <b>setState 并非真异步，只是看上去像异步。</b>在源码中，通过 isBatchingUpdates 来判断 setState 是先存进 state 队列还是直接更新，如果值为 true 则执行异步操作，为 false 则直接更新。
-  那么什么情况下 isBatchingUpdates 会为 true 呢？在 React 可以控制的地方，就为 true，比如在 React 生命周期事件和合成事件中，都会走合并操作，延迟更新的策略。
-  但在 React 无法控制的地方，比如原生事件，具体就是在 addEventListener 、setTimeout、setInterval 等事件中，就只能同步更新。
-  一般认为，做异步设计是为了性能优化、减少渲染次数，React 团队还补充了两点。
-	1、保持内部一致性。如果将 state 改为同步更新，那尽管 state 的更新是同步的，但是 props 不是。
-	2、启用并发更新，完成异步渲染。
-	<img src='https://s0.lgstatic.com/i/image2/M01/01/3E/CgpVE1_YU2KAStLdAAFVKxh7Dyg317.png'/>
-	<br/>
-	在React中，<b>如果是由React引发的事件处理（比如通过onClick引发的事件处理），调用setState不会同步更新this.state，除此之外的setState调用会同步执行this.state。</b>所谓“除此之外”，指的是绕过React通过addEventListener直接添加的事件处理函数，还有通过setTimeout/setInterval产生的异步调用。
-**原因：**在React的setState函数实现中，会根据一个变量isBatchingUpdates判断是直接更新this.state还是放到队列中回头再说，而isBatchingUpdates默认是false，也就表示setState会同步更新this.state，但是，<b>有一个函数batchedUpdates，这个函数会把isBatchingUpdates修改为true，而当React在调用事件处理函数之前就会调用这个batchedUpdates，造成的后果，就是由React控制的事件处理过程setState不会同步更新this.state</b>。
-  </pre>
-</details>
-[setState是同步的还是异步的？](https://www.jianshu.com/p/ce39a08b585e)
-
-
-
 Q：受控组件和非受控组件
 
 <details>
@@ -1022,7 +1037,7 @@ Q：React-Router 的实现原理及工作方式分别是什么？
 </details>
 
 
-#### 四、Http && 浏览器
+#### 四、Http && [浏览器](https://blog.poetries.top/browser-working-principle/)
 
 Q：谈谈你对 dns-prefetch 的理解
 
@@ -1187,8 +1202,6 @@ Q：WebSocket原理，和http的区别
 </details>
 
 
-
-
 Q：TCP三次握手和四次挥手
 
 <details>
@@ -1221,7 +1234,7 @@ Q：浏览器缓存？http缓存？主要要讲一讲强缓存、协商缓存、
 <details>
   <summary>点击查看</summary>
   <pre>
-  通常浏览器有两种缓存策略：强缓存（Expires，cache-control）和协商缓存（Last-modified ，Etag），并且缓存策略都是通过设置 HTTP Header 来实现的。<br/> 
+  通常浏览器有两种缓存策略：强缓存（Expires，Cache-Control）和协商缓存（Last-Modified/If-Modified-Since，Etag/If-None-Match），并且缓存策略都是通过设置 HTTP Header 来实现的。<br/> 
 1、浏览器第一次加载资源，服务器返回200，浏览器将资源文件从服务器上请求下载下来，并把response header及该请求的返回时间一并缓存；
 2、下一次加载资源时，先比较当前时间和上一次返回200时的时间差，如果没有超过cache-control设置的max-age，则没有过期，命中强缓存，不发请求直接从本地缓存读取该文件（如果浏览器不支持HTTP1.1，则用expires判断是否过期）；如果时间过期，则向服务器发送header带有If-None-Match和If-Modified-Since的请求；
 3、服务器收到请求后，优先根据Etag的值判断被请求的文件有没有做修改，Etag值一致则没有修改，命中协商缓存，返回304；如果不一致则有改动，直接返回新的资源文件带上新的Etag值并返回200；
@@ -1229,6 +1242,7 @@ Q：浏览器缓存？http缓存？主要要讲一讲强缓存、协商缓存、
   </pre>
   <img src='https://mmbiz.qpic.cn/mmbiz_png/83d3vL8fIicaLbdP0icWia9aMpmEQpgfNibdsoEyzvKKyIXFpISet9SVWxx1Uwz2WCZfdsMkib0VIeCbkCHrvtEkyBg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1'/>
 </details>
+
 
 [彻底理解浏览器的缓存机制](https://juejin.cn/post/6844903593275817998)
 
@@ -1300,6 +1314,14 @@ Q：从输入 URL 到页面加载完成的过程，一般要很详细的描述�
 <details>
   <summary>点击查看</summary>
   <pre>
+  0. 查找缓存（DNS缓存和HTTP缓存）
+  a. 域名解析
+  b. 发起TCP的3次握手
+  c. 建立TCP连接后发起http请求
+  d. 服务器端响应http请求，浏览器得到html代码
+  e. 浏览器解析html代码，并请求html代码中的资源
+  f. 浏览器对页面进行渲染呈现给用户
+  <br/>
  	<img src="https://i.loli.net/2021/06/11/EeI6WHMob5n9RJc.jpg" />
   DNS 核心系统是一个三层的树状，分布式结构，基本对应域名结构:
   1、根域名服务器（Root DNS Server）: 返回「com」,「cn」,「net」等顶级域名服务器的 IP 地址；
@@ -1316,6 +1338,9 @@ Q：从输入 URL 到页面加载完成的过程，一般要很详细的描述�
   6、DNS resolver 最终获得用户需要的 IP 地址。解析程序将此值返回至 Web 浏览器。DNS 解析程序还会将 example.com 的 IP 地址缓存 (存储) 您指定的时长，以便它能够在下次有人浏览 example.com 时更快地作出响应。
   </pre>
 </details>
+
+[浏览器端发起http请求流程](https://blog.poetries.top/browser-working-principle/guide/part1/lesson03.html#%E6%B5%8F%E8%A7%88%E5%99%A8%E7%AB%AF%E5%8F%91%E8%B5%B7http%E8%AF%B7%E6%B1%82%E6%B5%81%E7%A8%8B)
+
 [从输入URL到页面加载的过程？如何由一道题完善自己的前端知识体系！](https://zhuanlan.zhihu.com/p/34453198)
 
 
@@ -1327,6 +1352,14 @@ Q：OSI 7层模型和TCP/IP 4层模型
 
 
 Q：浅说 XSS 和 CSRF
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  CSRF：Cross-site-request forgery 跨站请求伪造。是向你页面注入JS去执行，然后JS函数体里做它想做的事情。
+  XSS：Cross-site scripting 跨域脚本攻击。是利用你本身的漏洞去帮助你主动执行那些接口，CSRF依赖于你这个用户要登录网站。
+  </pre>
+</details>
 
 [浅说 XSS 和 CSRF](https://github.com/dwqs/blog/issues/68#)
 
@@ -1362,10 +1395,18 @@ Q：说一下进程和线程
 	3.进程是资源分配的最小单位，线程是程序执行的最小单位。
 	4.一个线程可以创建和撤销另一个线程，同一个进程中的多个线程之间可以并发执行.
   </pre>
-  <img src='https://mmbiz.qpic.cn/mmbiz_png/83d3vL8fIicaLbdP0icWia9aMpmEQpgfNibdhmengREhDlJk1VHprOsIYmdzSRQe8ImAc3vRE8p5bz9GsAoZS1tvLw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1'/>
-    <img src='https://mmbiz.qpic.cn/mmbiz_png/83d3vL8fIicaLbdP0icWia9aMpmEQpgfNibdnW0wfQCgJ9zIqefQJmZSAibIrIQSqUB2WO4HtacvcIib99PTZu1GVxCg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1'/>
+  <img src='https://static001.geekbang.org/resource/image/33/da/3380f0a16c323deda5d3a300804b95da.png'/>
+  <pre>
+  多线程可以并行处理任务，但是线程是不能单独存在的，它是由进程来启动和管理的。那什么又是进程呢？
+  一个进程就是一个程序的运行实例。详细解释就是，启动一个程序的时候，操作系统会为该程序创建一块内存，用来存放代码、运行中的数据和一个执行任务的主线程，我们把这样的一个运行环境叫进程。
+  从图中可以看到，线程是依附于进程的，而进程中使用多线程并行处理能提升运算效率。
+  1. 进程中的任意一线程执行出错，都会导致整个进程的崩溃。
+  2. 线程之间共享进程中的数据。
+  <img src='https://static001.geekbang.org/resource/image/d0/9e/d0efacd7f299ed99e776cb97da2a799e.png' />
+  3. 当一个进程关闭之后，操作系统会回收进程所占用的内存。
+  4. 进程之间的内容相互隔离。
+  </pre>
 </details>
-
 
 
 
@@ -1416,7 +1457,6 @@ Q：requestAnimationFrame 与 requestIdleCallback 含义及区别
   	<img src='https://user-images.githubusercontent.com/1249423/42104778-74e0cea2-7c00-11e8-8877-0e3713f4a431.png'/>
   </pre>
 </details>
-
 [requestAnimationFrame 与 requestIdleCallback 含义及区别](https://juejin.cn/post/6844904018200756238)
 
 
@@ -1559,6 +1599,34 @@ Q：webpack设计理念
 </details>
 
 
+Q：webpack相关总结
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  babel和webpack的区别？
+  babel：js新语法编译工具，不关心模块化。
+  webpack：打包构建工具，是多个loader，plugin的集合
+  <br/>
+  module, chunk, bundle的区别？
+  1、module：各个源码文件，webpack中一切皆模块
+  2、chunk：多模块合并成的，如entry，import()，splitChunk
+  3、bundle：最终的输出文件
+  <br/>
+  为何Proxy不能被Polyfill?
+  如<b>Class</b>可以用<b>function</b>模拟
+  如<b>Promise</b>可以用<b>callback</b>来模拟
+  但<b>Proxy</b>的功能用<b>Object.defineProperty</b>无法模拟
+  <br/>
+  babel-polyfill和babel-runtime的区别?
+  <b>babel-polyfill</b>会污染全局
+  <b>babel-runtime</b>不会污染全局
+  产生第三方<b>lib</b>要用<b>babel-runtime</b>
+  </pre>
+</details>
+
+
+
 Q：webpack 构建流程？打包原理？
 
 <details>
@@ -1582,6 +1650,22 @@ Q：webpack 构建流程？打包原理？
 
 Q：webpack 项目中做的一些优化
 
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  1、小图片base64编码
+  2、bundle加hash
+  3、懒加载
+  4、提供公共代码
+  5、使用CDN加速
+  6、使用production
+  7、Scope Hosting
+  	a、代码体积更小
+  	b、创建函数作用域更小
+  	c、代码可读性更好
+  </pre>
+</details>
+
 [webpack优化解决项目体积大、打包时间长、刷新时间长问题！](https://cloud.tencent.com/developer/article/1643104)
 
 
@@ -1595,7 +1679,6 @@ Q：loader和plugin的区别？有没有写过？常用哪些loader和plugin
 	插件plugin: loader用于转换某些类型的模块，而插件用于执行范围更广的任务。比如：打包优化、资源管理、注入环境变量等，它是在整个编译周期都起作用。
   </pre>
 </details>
-
 [webpack 中 loader 和 plugin 的区别是什么](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/308)
 
 [Loader和Plugin的区别](https://segmentfault.com/a/1190000037712654)
@@ -1667,4 +1750,3 @@ Q：Reflect 对象创建目的
   也就是说，不管 Proxy 怎么修改默认行为，你总可以在 Reflect 上获取 默认行为。
   </pre>
 </details>
-
