@@ -1,14 +1,11 @@
 class Subject {
-	constructor(name) {
-		this.name = name; // 被观察者的名字
-		this.message = '今天是晴天'; // 存放一个值
+	constructor() {
 		this.observers = []; // 存放所有观察者
 	}
 	on(observer) {
 		this.observers.push(observer);
 	}
-	emit(data) {
-		this.message = data;
+	notify(data) {
 		this.observers.forEach(o => o.update(data));
 	}
 }
@@ -31,4 +28,4 @@ let o2 = new Observer('小明');
 subject.on(o1);
 subject.on(o2);
 
-subject.emit('明天会下雨');
+subject.notify('明天会下雨');

@@ -269,8 +269,23 @@ Q：各种继承
 ps：super关键字指代父类的实例，即父类的this对象。在子类构造函数中，调用super后，才可使用this关键字，否则报错。
   </pre>
 </details>
-
 [做完这48道题彻底弄懂JS继承](https://juejin.cn/post/6844904098941108232)
+
+
+
+Q：class 定义类和 function 定义类的区别
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  1.class不存在变量提升，声明的class在它之前拿不到;
+  2.class类有static静态方法;
+  3.class必须用new调用，不能不能直接执行;
+  4.class类无法遍历它实例原型链上的属性和方法;
+  5.es5原型链定义了Father和Son，Son.__proto__ == Function.prototype
+  6.es6原型链中Son.__proto__ === Father
+  </pre>
+</details>
 
 
 
@@ -486,47 +501,6 @@ Q：说说对你对JavaScript异步编程的理解？
 
 
 
-Q：ES Module与 CommonJS 模块的差异？两者互相加载的方式？一般会扯到AMD
-
-<details>
-  <summary>点击查看</summary>
-  <pre>
-  <b>IIFE</b>：使用自执行函数来编写模块化，特点：<b>在一个单独的函数作用域中执行代码，避免变量冲突。</b>
-    (function(){
-    return {
-      data:[]
-    }
-  })()
-  <b>AMD</b>：使用requireJS 来编写模块化，特点：<b>依赖必须提前声明好。</b>
-  define('./index.js',function(code){
-    // code 就是index.js 返回的内容
-  })
-  <b>CMD</b>：使用seaJS 来编写模块化，特点：<b>支持动态引入依赖文件。</b>
-  define(function(require, exports, module) {  
-    var indexCode = require('./index.js');
-  })
-  <b>CommonJS</b>：nodejs 中自带的模块化。
-  var fs = require('fs');
-  <b>ES Modules</b>：ES6 引入的模块化，支持import 来引入另一个 js 。
-  import a from 'a';
-  <b>UMD</b>：兼容AMD，CommonJS 模块化语法。
-  <b>webpack(require.ensure)</b>：webpack 2.x 版本中的代码分割。
-  <br/>
-  <b>commonjs与ES6的module还是有很大区别的：</b>
-  1、两者的模块导入导出语法不同：commonjs是module.exports，exports导出，require导入；ES6则是export导出，import导入。
-  2、commonjs是<b>执行时引入（动态引入）</b>，ES6是<b>编译时引入（静态引入，才能静态分析，实现<b>Tree-Shaking</b>）</b>。
-  3、ES6在编译期间会将所有import提升到顶部，commonjs不会提升require。
-  4、commonjs导出的是一个值拷贝，会对加载结果进行缓存，一旦内部再修改这个值，则不会同步到外部。ES6是导出的一个引用，内部修改可以同步到外部。
-  5、两者的循环导入的实现原理不同，commonjs是当模块遇到循环加载时，返回的是当前已经执行的部分的值，而不是代码全部执行后的值，两者可能会有差异。所以，输入变量的时候，必须非常小心。ES6 模块是动态引用，如果使用import从一个模块加载变量（即import foo from 'foo'），那些变量不会被缓存，而是成为一个指向被加载模块的引用，需要开发者自己保证，真正取值的时候能够取到值。
-  6、commonjs中顶层的this指向这个模块本身，而ES6中顶层this指向undefined。
-  7、CommonJs 是单个值导出，ES6 Module可以导出多个
-  </pre>
-</details>
-
-[再次梳理AMD、CMD、CommonJS、ES6 Module的区别](https://juejin.cn/post/6844903983987834888)
-
-
-
 Q：defer和async的区别
 
 <details>
@@ -543,6 +517,21 @@ Q：defer和async的区别
 
 Q：Object.defineProperty和Proxy区别
 
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  Proxy使用上比Object.defineProperty方便的多。
+  Proxy代理整个对象，Object.defineProperty只代理对象上的某个属性。
+  vue中，Proxy在调用时递归，Object.defineProperty在一开始就全部递归，Proxy性能优于Object.defineProperty。
+  对象上定义新属性时，Proxy可以监听到，Object.defineProperty监听不到。
+  数组新增删除修改时，Proxy可以监听到，Object.defineProperty监听不到。
+  Proxy有13中拦截方法，如ownKeys、deleteProperty、has 等是 Object.defineProperty 不具备的。
+  Proxy返回的是一个新对象，我们可以只操作新的对象达到目的，而Object.defineProperty只能遍历对象属性直接修改;
+  Object.defineProperty 也不能对 es6 新产生的 Map,Set 这些数据结构做出监听。
+  Proxy不兼容IE，Object.defineProperty不兼容IE8及以下。
+  </pre>
+</details>
+
 [Object.defineProperty和Proxy区别](https://blog.csdn.net/qwe435541908/article/details/107360849)
 
 
@@ -553,31 +542,19 @@ Q：Map和Set的用法，WeakMap和WeakSet区别
 
 
 
-Q：class 的protected、 pravila和public
+Q：Reflect 对象创建目的
 
 <details>
-  <summary>点击查看</summary>
+	<summary>点击查看</summary>
   <pre>
-  1、public 修饰的属性可以在任意位置进行访问修改，默认值，作用范围是全局
-  2、private 修饰的属性只能在类的内部进行访问修改，私有属性，作用范围是类的内部。通过在类中添加set get存取器可以在类的外部访问私有属性
-  3、protected 修饰的属性只能在当前类和当前类的子类中进行访问修改，受保护的属性，作用范围是当前类和子类的范围内
+  1、原先Object对象上一些属于语言内部的方法，在未来都会被部署到Reflect上去。而现阶段这些方法是在Object和Reflect上并存的。例如Object.defineProperty等方法。
+  2、目前Object上某些方法的返回结果，部署到Reflect上之后会变得越来越合理。比如Object.defineProperty在定义属性失败时会抛出错误，而Reflect.defineProperty则直接返回false。
+  3、让 Object 操作都变成函数行为。将delete obj[name]这种命令式操作改成函数式操作
+  4、Reflect对象的方法与Proxy对象上的方法一一对应，这样在使用Proxy代理方法的时候，如果只是想要在方法原有功能上添加一些功能，则可以调用Reflect上的方法来完成默认行为，然后再添加自己想要的逻辑功能来增强方法。
+  也就是说，不管 Proxy 怎么修改默认行为，你总可以在 Reflect 上获取 默认行为。
   </pre>
 </details>
 
-
-Q：class 定义类和 function 定义类的区别
-
-<details>
-  <summary>点击查看</summary>
-  <pre>
-  1.class不存在变量提升，声明的class在它之前拿不到;
-  2.class类有static静态方法;
-  3.class必须用new调用，不能不能直接执行;
-  4.class类无法遍历它实例原型链上的属性和方法;
-  5.es5原型链定义了Father和Son，Son.__proto__ == Function.prototype
-  6.es6原型链中Son.__proto__ === Father
-  </pre>
-</details>
 
 
 #### 三、[React](https://segmentfault.com/a/1190000018604138)
@@ -1242,8 +1219,6 @@ Q：浏览器缓存？http缓存？主要要讲一讲强缓存、协商缓存、
   </pre>
   <img src='https://mmbiz.qpic.cn/mmbiz_png/83d3vL8fIicaLbdP0icWia9aMpmEQpgfNibdsoEyzvKKyIXFpISet9SVWxx1Uwz2WCZfdsMkib0VIeCbkCHrvtEkyBg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1'/>
 </details>
-
-
 [彻底理解浏览器的缓存机制](https://juejin.cn/post/6844903593275817998)
 
 
@@ -1285,7 +1260,6 @@ Q：什么是跨域？什么情况下会跨域？浏览器根据什么字段判�
   <img src='https://i.loli.net/2021/05/22/zO73bBlwgr5QeCq.png'/>
   </pre>
 </details>
-
 [跨域资源共享 CORS 详解](https://www.ruanyifeng.com/blog/2016/04/cors.html)
 
 [前端常见跨域解决方案（全）](https://segmentfault.com/a/1190000011145364)
@@ -1297,7 +1271,9 @@ Q：讲一讲浏览器事件循环Event Loop？node 事件循环描述一下？
 <details>
   <summary>点击查看</summary>
   <pre>
-  其中一个主要的区别在于浏览器的event loop 和nodejs的event loop 在处理异步事件的顺序是不同的,nodejs中有micro event;其中Promise属于micro event 该异步事件的处理顺序就和浏览器不同.nodejs V11.0以上 这两者之间的顺序就相同了.
+  JavaScript 引擎首先从宏任务队列（macrotask queue）中取出第一个任务；执行完毕后，再将微任务（microtask queue）中的所有任务取出，按照顺序分别全部执行（这里包括不仅指开始执行时队列里的微任务），<b>如果在这一步过程中产生新的微任务，也需要执行</b>；然后再从宏任务队列中取下一个，执行完毕后，再次将 microtask queue 中的全部取出，循环往复，直到两个 queue 中的任务都取完。
+  一次 Eventloop 循环会处理一个宏任务和所有这次循环中产生的微任务。
+	<br/>
   node11以下版本的执行结果(先执行所有的宏任务，再执行微任务)
   node11及浏览器的执行结果(顺序执行宏任务和微任务)
   </pre>
@@ -1550,8 +1526,9 @@ Q：EventEmitter 概念，使用场景，错误捕获
 <details>
   <summary>点击查看</summary>
   <pre>
+  	EventEmitter是node中的模块，具体实现就是发布订阅模式。
   	观察者模式：观察者（Observer）直接订阅（Subscribe）主题（Subject），而当主题被激活的时候，会触发（Fire Event）观察者里的事件。
-	发布订阅模式：订阅者（Subscriber）把自己想订阅的事件注册（Subscribe）到调度中心（Topic），当发布者（Publisher）发布该事件（Publish topic）到调度中心，也就是该事件触发时，由调度中心统一调度（Fire Event）订阅者注册到调度中心的处理代码。
+  	发布订阅模式：订阅者（Subscriber）把自己想订阅的事件注册（Subscribe）到调度中心（Topic），当发布者（Publisher）发布该事件（Publish topic）到调度中心，也就是该事件触发时，由调度中心统一调度（Fire Event）订阅者注册到调度中心的处理代码。
 	<img src='https://mmbiz.qpic.cn/mmbiz_png/83d3vL8fIicaLbdP0icWia9aMpmEQpgfNibd3JCrou7rqZ98DXWTk19ltNicjG6iakLezgfmU5kOO65DORpQ3kHLTGkA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1' />
   <img src='https://gitee.com/heptaluan/backups/raw/master/cdn/node/17.png'/>
   1、在观察者模式中，观察者知道 Subject 的存在，Subject 一直保持对观察者进行记录，然而，在发布/订阅模式中，发布者和订阅者不知道对方的存在，它们只有通过信息中介进行通信
@@ -1561,6 +1538,8 @@ Q：EventEmitter 概念，使用场景，错误捕获
 </details>
 
 [Events模块](https://javascript.ruanyifeng.com/nodejs/events.html)
+
+[从一道面试题简单谈谈发布订阅和观察者模式](https://segmentfault.com/a/1190000021272622)
 
 
 
@@ -1605,13 +1584,13 @@ Q：webpack相关总结
   <summary>点击查看</summary>
   <pre>
   babel和webpack的区别？
-  babel：js新语法编译工具，不关心模块化。
+  babel：js新语法编译工具，不关心模块化。Babel的作用是 从一种源码到另一种源码，充当转换编译器的作用，可以简述为 <b>解析</b>（解析JS代码）-><b>转换</b>（解析和修改AST）-><b>重建</b>（将修改后的AST转换成另一种JS代码）
   webpack：打包构建工具，是多个loader，plugin的集合
   <br/>
   module, chunk, bundle的区别？
-  1、module：各个源码文件，webpack中一切皆模块
-  2、chunk：多模块合并成的，如entry，import()，splitChunk
-  3、bundle：最终的输出文件
+  1、module：开发中的单个模块，在Webpack中⼀个模块对应⼀个⽂件，Webpack会从配置的entry中递归开始找出所有依赖的模块。
+  2、chunk：代码块,一个chunk由多个模块组合⽽成，⽤于代码的合并和分割;如entry，import()，splitChunk。
+  3、bundle：由Webpack打包出来的文件，最终的输出文件。
   <br/>
   为何Proxy不能被Polyfill?
   如<b>Class</b>可以用<b>function</b>模拟
@@ -1624,6 +1603,7 @@ Q：webpack相关总结
   产生第三方<b>lib</b>要用<b>babel-runtime</b>
   </pre>
 </details>
+
 
 
 
@@ -1676,9 +1656,10 @@ Q：loader和plugin的区别？有没有写过？常用哪些loader和plugin
 	<summary>点击查看</summary>  
   <pre>
    	加载器loader: webpack默认处理js和json文件，loader配置webpack去处理其他类型的文件，将其转为有效模块给应用程序使用，并添加到依赖图中，运行在打包之前。
-	插件plugin: loader用于转换某些类型的模块，而插件用于执行范围更广的任务。比如：打包优化、资源管理、注入环境变量等，它是在整个编译周期都起作用。
+	插件plugin: Plugin可以扩展Webpack的功能,让Webpack具有灵活性。在Webpack运⾏的⽣命周期中会⼴播出许多事件，Plugin可以监听这些事件，在合适的时机通过Webpack提供的API改变输出结果。比如：打包优化、资源管理、注入环境变量等，它是在整个编译周期都起作用。
   </pre>
 </details>
+
 [webpack 中 loader 和 plugin 的区别是什么](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/308)
 
 [Loader和Plugin的区别](https://segmentfault.com/a/1190000037712654)
@@ -1698,6 +1679,47 @@ Q：tree-shaking？对于 CommonJS，tree shaking怎么办？
 [Tree-Shaking的工作原理](https://cloud.tencent.com/developer/article/1624085)
 
 [浅谈 ES 模块和 Webpack Tree-shaking](https://zhuanlan.zhihu.com/p/43844419)
+
+
+
+Q：ES Module与 CommonJS 模块的差异？两者互相加载的方式？一般会扯到AMD
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  <b>IIFE</b>：使用自执行函数来编写模块化，特点：<b>在一个单独的函数作用域中执行代码，避免变量冲突。</b>
+    (function(){
+    return {
+      data:[]
+    }
+  })()
+  <b>AMD</b>：使用requireJS 来编写模块化，特点：<b>依赖必须提前声明好。</b>
+  define('./index.js',function(code){
+    // code 就是index.js 返回的内容
+  })
+  <b>CMD</b>：使用seaJS 来编写模块化，特点：<b>支持动态引入依赖文件。</b>
+  define(function(require, exports, module) {  
+    var indexCode = require('./index.js');
+  })
+  <b>CommonJS</b>：nodejs 中自带的模块化。
+  var fs = require('fs');
+  <b>ES Modules</b>：ES6 引入的模块化，支持import 来引入另一个 js 。
+  import a from 'a';
+  <b>UMD</b>：兼容AMD，CommonJS 模块化语法。
+  <b>webpack(require.ensure)</b>：webpack 2.x 版本中的代码分割。
+  <br/>
+  <b>commonjs与ES6的module还是有很大区别的：</b>
+  1、两者的模块导入导出语法不同：commonjs是module.exports，exports导出，require导入；ES6则是export导出，import导入。
+  2、commonjs是<b>执行时引入（动态引入）</b>，ES6是<b>编译时引入（静态引入，才能静态分析，实现<b>Tree-Shaking</b>）</b>。
+  3、ES6在编译期间会将所有import提升到顶部，commonjs不会提升require。
+  4、commonjs导出的是一个值拷贝，会对加载结果进行缓存，一旦内部再修改这个值，则不会同步到外部。ES6是导出的一个引用，内部修改可以同步到外部。
+  5、两者的循环导入的实现原理不同，commonjs是当模块遇到循环加载时，返回的是当前已经执行的部分的值，而不是代码全部执行后的值，两者可能会有差异。所以，输入变量的时候，必须非常小心。ES6 模块是动态引用，如果使用import从一个模块加载变量（即import foo from 'foo'），那些变量不会被缓存，而是成为一个指向被加载模块的引用，需要开发者自己保证，真正取值的时候能够取到值。
+  6、commonjs中顶层的this指向这个模块本身，而ES6中顶层this指向undefined。
+  7、CommonJs 是单个值导出，ES6 Module可以导出多个
+  </pre>
+</details>
+
+[再次梳理AMD、CMD、CommonJS、ES6 Module的区别](https://juejin.cn/post/6844903983987834888)
 
 
 
@@ -1737,16 +1759,21 @@ Q：如何优化SPA应用的首屏加载速度慢的问题
 </details>
 
 
-
-Q：Reflect 对象创建目的
+Q：为什么0.1+0.2 != 0.3
 
 <details>
-	<summary>点击查看</summary>
+  <summary>点击查看</summary>
   <pre>
-  1、原先Object对象上一些属于语言内部的方法，在未来都会被部署到Reflect上去。而现阶段这些方法是在Object和Reflect上并存的。例如Object.defineProperty等方法。
-  2、目前Object上某些方法的返回结果，部署到Reflect上之后会变得越来越合理。比如Object.defineProperty在定义属性失败时会抛出错误，而Reflect.defineProperty则直接返回false。
-  3、让 Object 操作都变成函数行为。将delete obj[name]这种命令式操作改成函数式操作
-  4、Reflect对象的方法与Proxy对象上的方法一一对应，这样在使用Proxy代理方法的时候，如果只是想要在方法原有功能上添加一些功能，则可以调用Reflect上的方法来完成默认行为，然后再添加自己想要的逻辑功能来增强方法。
-  也就是说，不管 Proxy 怎么修改默认行为，你总可以在 Reflect 上获取 默认行为。
+  十进制整数转二进制方法：<b>除2取余</b>；十进制小数转二进制方法：<b>乘2除整</b>
+  0.1 * 2 = 0.2 # 0
+  0.2 * 2 = 0.4 # 0
+  0.4 * 2 = 0.8 # 0
+  0.8 * 2 = 1.6 # 1
+  0.6 * 2 = 1.2 # 1
+  0.2 * 2 = 0.4 # 0
+  .....
+  <b>二进制能精确地表示位数有限且分母是2的倍数的小数</b>
   </pre>
 </details>
+
+[为什么0.1+0.2 != 0.3](https://segmentfault.com/a/1190000012175422)
