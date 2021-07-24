@@ -21,3 +21,15 @@ function add(a: Combinable, b: Combinable) {
 	return a + b;
 }
 const result = add(1, 2);
+
+interface Test<T> {
+	name: string;
+	age: number;
+	info: T;
+}
+
+const data: Test<boolean> = {
+	name: 'sun',
+	age: 30,
+	info: true
+};

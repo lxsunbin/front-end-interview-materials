@@ -1,4 +1,4 @@
-####一、Html&&Css
+
 
 Q：doctype的作用
 
@@ -557,7 +557,61 @@ Q：Reflect 对象创建目的
 
 
 
-#### 三、[React](https://segmentfault.com/a/1190000018604138)
+####三、Typescript
+
+Q：TypeScript 中 const 和 readonly 的区别？枚举和常量枚举的区别？
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  1、const是一个编译期常量， readonly是一个运行时常量
+  2、const只能声明基元类型，枚举类型，字符串类型。readonly则无限制
+  3、const天生为静态数据，无需再添加static标识
+  4、readonly是运行时变量，只能赋值一次。特例是可以定义时赋值一次，构造函数中再赋值一次
+  <br/>
+  枚举和常量枚举的区别：
+	常量枚举通过在枚举上使用 const 修饰符来定义，常量枚举不同于常规的枚举，他们会在编译阶段被删除。常量枚举成员在使用的地方会被内联进来，之所以可以这么做是因为，常量枚举不允许包含计算成员；如上例所示，在运行时是没有 Size 变量的，因此常量枚举会带来一个对性能的提升。
+  </pre>
+</details>
+
+
+
+Q：Typescript 中的 interface 和 type 到底有什么区别
+
+[typescript 中的 interface 和 type 到底有什么区别](https://github.com/SunshowerC/blog/issues/7)
+
+
+
+Q：TypeScript 中 any、never、unknown 和 void 有什么区别？
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  <font color=red>any</font> 顾名思义就是任意类型。
+  <font color=red>never</font> 表示永不存在的值的类型。
+  <font color=red>unknown</font> 表示未知类型，即写代码的时候还不清楚会得到怎样的数据类型，它能被赋值为任何类型，但不能被赋值给除了 any 和 unknown 之外的其他类型，同时，不允许执行 unknown 类型变量的方法（any 可以）。
+  <font color=red>void</font> 表示无任何类型，正好与 any 相反，没有类型，如果是函数则应没有返回值或者返回 undefined
+  </pre>
+</details>
+
+
+
+Q：TypeScript 中预定义的有条件类型有哪些
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  Exclude<T, U> -- 从T中剔除可以赋值给U的类型。
+  Extract<T, U> -- 提取T中可以赋值给U的类型。
+  NonNullable<T> -- 从T中剔除null和undefined。
+  ReturnType<T> -- 获取函数返回值类型。
+  InstanceType<T> -- 获取构造函数类型的实例类型。
+  </pre>
+</details>
+
+
+
+#### 四、[React](https://segmentfault.com/a/1190000018604138)
 
 Q：谈谈React
 
@@ -758,12 +812,13 @@ Q：与其他框架相比，React 的 diff 算法有何不同？
 
 
 
-Q：什么是HOC？React里面用过哪些？
+Q：高阶函数HOC和自定义 Hook 的优缺点
 
 <details>
   <summary>点击查看</summary>
   <pre>
-  高阶组件是重用组件逻辑的高级方法，是一种源于 React 的组件模式。 HOC 是自定义组件，在它之内包含另一个组件。它们可以接受子组件提供的任何动态，但不会修改或复制其输入组件中的任何行为。你可以认为 HOC 是“纯（Pure）”组件。
+  高阶组件实际上就是把一个组件当参数传入，再返回一个新的组件出来。业务过度封装的高阶组件，可能会导致组件层次嵌套变深。
+  而自定义 Hook 可以不用使用高阶组件依然可以进行功能复用。
   HOC可用于许多任务，例如：
 	代码重用，逻辑和引导抽象
 	渲染劫持
@@ -771,6 +826,7 @@ Q：什么是HOC？React里面用过哪些？
 	Props 控制
   </pre>
 </details>
+
 
 
 Q：如何面向组件跨层级通信？
@@ -1014,7 +1070,7 @@ Q：React-Router 的实现原理及工作方式分别是什么？
 </details>
 
 
-#### 四、Http && [浏览器](https://blog.poetries.top/browser-working-principle/)
+#### 五、Http && [浏览器](https://blog.poetries.top/browser-working-principle/)
 
 Q：谈谈你对 dns-prefetch 的理解
 
@@ -1201,6 +1257,13 @@ Q：TCP三次握手和四次挥手
 
 Q：浅析CDN原理
 
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  CDN的工作原理就是将您源站的资源缓存到位于全球各地的CDN节点上，用户请求资源时，就近返回节点上缓存的资源，而不需要每个用户的请求都回您的源站获取，避免网络拥塞、缓解源站压力，保证用户访问资源的速度和体验。
+  </pre>
+</details>
+
 [浅析CDN原理](https://segmentfault.com/a/1190000039045541)
 
 
@@ -1332,8 +1395,17 @@ Q：浅说 XSS 和 CSRF
 <details>
   <summary>点击查看</summary>
   <pre>
-  CSRF：Cross-site-request forgery 跨站请求伪造。是向你页面注入JS去执行，然后JS函数体里做它想做的事情。
-  XSS：Cross-site scripting 跨域脚本攻击。是利用你本身的漏洞去帮助你主动执行那些接口，CSRF依赖于你这个用户要登录网站。
+  <b>CSRF</b>：Cross-site-request forgery 跨站请求伪造。是向你页面注入JS去执行，然后JS函数体里做它想做的事情。
+  <b>XSS</b>：Cross-site scripting 跨域脚本攻击。是利用你本身的漏洞去帮助你主动执行那些接口，CSRF依赖于你这个用户要登录网站。
+  <b>防御 XSS 攻击</b>:
+  HttpOnly 防止劫取 Cookie
+  用户的输入检查
+  服务端的输出检查
+  --------------------------
+  <b>防御 CSRF 攻击</b>:
+  验证码
+  Referer Check
+  Token 验证
   </pre>
 </details>
 
@@ -1491,7 +1563,7 @@ Q：http 状态码301、302、303、307、308 的区别
 
 
 
-#### 五、其他
+#### 六、其他
 
 Q：V8相关问题
 
@@ -1735,12 +1807,6 @@ Q：长列表渲染怎么优化？
 
 
 
-Q：Typescript 中的 interface 和 type 到底有什么区别
-
-[typescript 中的 interface 和 type 到底有什么区别](https://github.com/SunshowerC/blog/issues/7)
-
-
-
 Q：如何优化SPA应用的首屏加载速度慢的问题
 
 <details>
@@ -1759,12 +1825,32 @@ Q：如何优化SPA应用的首屏加载速度慢的问题
 </details>
 
 
+Q：SSR 技术和 SPA 技术的各自的优缺点是什么
+
+<details>
+  <summary>点击查看</summary>
+  <pre>
+  <font color=red>SSR</font>：
+  更利于SEO。
+  更利于首屏渲染
+  服务端压力较大
+  <font color=red>SPA</font>：
+  页面之间的切换非常快
+  一定程度上减少了后端服务器的压力（不用管页面逻辑和渲染）
+  后端程序只需要提供API，完全不用管客户端到底是Web界面还是手机等
+  不利于SEO
+  首屏加载压力大
+  </pre>
+</details>
+
+
+
 Q：为什么0.1+0.2 != 0.3
 
 <details>
   <summary>点击查看</summary>
   <pre>
-  十进制整数转二进制方法：<b>除2取余</b>；十进制小数转二进制方法：<b>乘2除整</b>
+  十进制整数转二进制方法：<b>除2取余</b>；十进制小数转二进制方法：<b>乘2取整</b>
   0.1 * 2 = 0.2 # 0
   0.2 * 2 = 0.4 # 0
   0.4 * 2 = 0.8 # 0
