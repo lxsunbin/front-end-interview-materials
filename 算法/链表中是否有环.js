@@ -61,7 +61,7 @@ var hasCycle = function (head) {
 		if (fast.next == null) return false;
 		slow = slow.next;
 		fast = fast.next.next;
-		if (slow == fals) return true;
+		if (slow == fast) return true;
 	}
 	return false;
 };

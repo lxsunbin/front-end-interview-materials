@@ -1,18 +1,48 @@
-/**
-nodeType===1 // 元素节点 e,g, div
-nodeType===2 // 属性节点 e,g, with
-nodeType===3 // 文本节点 e,g, "hello world"
- */
-function traversal(node) {
-	// 得先判断节点是否存在 && 节点下面是否还有其它节点，节点本身得是元素节点
-	if (node && node.nodeType === 1) {
-		console.log(node.tagName);
-	}
-	for (let i = 0; i < node.childNodes.length; i++) {
-		if (node.childNodes[i].nodeType === 1) {
-			// nodeType为1表示元素节点
-			//递归先序遍历子节点
-			traversal(item);
+{
+	/* <div id="container">
+	<div class="node_1">
+		<div class="node_1_1"></div>
+		<div class="node_1_2"></div>
+		<div class="node_1_3"></div>
+	</div>
+	<div class="node_2">
+		<div class="node_2_1"></div>
+		<div class="node_2_2"></div>
+	</div>
+	<div class="node_3"></div>	
+</div> */
+}
+
+function breathTravalSal(node) {
+	const nodes = [];
+	const queue = [];
+	if (node) {
+		queue.push(node);
+		while (queue.length) {
+			const item = queue.shift();
+			nodes.push(item);
+			for (let v of item.children) {
+				queue.push(v);
+			}
 		}
 	}
+	return nodes;
 }
+function deepTravalSal(node) {
+	const nodes = [];
+	const stack = [];
+	if (node) {
+		stack.push(node);
+		while (stack.length) {
+			const item = stack.pop();
+			const len = item.children.length;
+			nodes.push(item);
+			for (let i = len - 1; i >= 0; i--) {
+				stack.push(item.children[i]);
+			}
+		}
+	}
+	return nodes;
+}
+const parentDOM = document.getElementById('container');
+console.log(breathTravalSal(parentDOM), deepTravalSal(parentDOM));

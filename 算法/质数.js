@@ -22,24 +22,20 @@ function isPrime(num) {
 }
 
 var countPrimes = function (n) {
-	let res = 0,
-		flag = 1;
-	if (n < 2) {
+	if (n <= 2) {
 		return 0;
 	}
-	for (let i = 1; i < n; i++) {
-		for (let j = 2; j <= Math.sqrt(i); j++) {
-			if (i % j === 0) {
-				flag = 0;
-				break;
+	let count = 0;
+	//厄拉多塞筛法
+	let flag = new Array(n).fill(true);
+	for (let num = 2; num < n; num++) {
+		if (flag[num]) {
+			count++;
+			for (let help = num + num; help < n; help += num) {
+				flag[help] = false;
 			}
 		}
-		if (flag == 2) {
-			res++;
-		} else {
-			flag = 2;
-		}
 	}
-	return res;
+	return count;
 };
 countPrimes(10);
