@@ -1,4 +1,4 @@
-
+####一、HTML&CSS
 
 Q：doctype的作用
 
@@ -6,7 +6,7 @@ Q：doctype的作用
   <summary>点击查看</summary>
   <pre>
   标签是一种标准通用标记语言的文档类型声明，它的目的是要告诉标准通用标记语言解析器，它应该使用什么样的文档类型定义（DTD）来解析文档。声明文档的解析类型(document.compatMode)，避免浏览器的怪异模式。
-<!DOCTYPE> 声明必须是 HTML 文档的第一行，位于 <html> 标签之前。
+!DOCTYPE 声明必须是 HTML 文档的第一行，位于html标签之前。
 <br/>
 document.compatMode：
 BackCompat：怪异模式，浏览器使用自己的怪异模式解析渲染页面。
@@ -18,6 +18,7 @@ CSS1Compat：标准模式，浏览器使用W3C的标准解析渲染页面。
 那么浏览器就得老老实实的按照W3C的标准解析渲染页面，这样一来，你的页面在所有的浏览器里显示的就都是一个样子了。
   </pre>
 </details>
+
 
 
 Q：什么是语义化标签
@@ -218,7 +219,6 @@ Q：讲讲js数据类型？基本和引用的区别？Symbol和BigInt讲一讲�
    <b>BigInt</b>是一种新的数据类型，用于当整数值大于Number数据类型支持的范围时。这种数据类型允许我们安全地对大整数执行算术操作，表示高分辨率的时间戳，使用大整数id，等等，而不需要使用库。
   </pre>
 </details>
-
 [一文说透 JS 中的数据类型](https://juejin.cn/post/6904593734168477710)
 
 [基本数据类型和引用类型的区别详解](https://segmentfault.com/a/1190000008472264)
@@ -423,7 +423,7 @@ Q：call、apply、bind区别？bind实现？bind之后还能修改this指向吗
   1、<b>call(object,arg1,arg2)</b> ，call方法的第一个参数是函数中this重新指向的对象，剩下的参数是传入该函数的形参
   不传，或者传null,undefined， 函数中的 this 指向 window 对象，传递另一个函数的函数名，函数中的 this 指向这个函数的引用，传递字符串、数值或布尔类型等基础类型，函数中的 this 指向其对应的包装对象，如 String、Number、Boolean，传递一个对象，函数中的 this 指向这个对象。
   2、<b>apply(object,[arg1,arg2])</b>，apply方法的第一个参数是函数中this重新指向的对象，第二个参数数组是传入该函数的形参；<b>和call方法唯一区别是第二参数的传递形式是数组。</b>
-  3、<b>bind(object,arg1,arg2)</b>，bind方法是ES5 新增的一个方法，传参和call方法一致。<b>与call、apply方法的区别是，call和apply方法会对目标函数进行自动执行，会返回一个新的函数。call和apply无法在事件绑定函数中使用。而bind弥补了这个缺陷，在实现改变函数 this 的同时又不会自动执行目标函数，因此可以完美的解决上述问题，</b>
+  3、<b>bind(object,arg1,arg2)</b>，bind方法是ES5 新增的一个方法，传参和call方法一致。<b>与call、apply方法的区别是，call和apply方法会对目标函数进行自动执行，bind会返回一个新的函数。call和apply无法在事件绑定函数中使用。而bind弥补了这个缺陷，在实现改变函数 this 的同时又不会自动执行目标函数，因此可以完美的解决上述问题，</b>
   <br/>
   <b>注意：一旦函数通过bind绑定了有效的this对象，那么在函数执行过程中this会指向该对象，即使使用call、apply也不能改变this的指向</b>
   </pre>
@@ -507,7 +507,7 @@ Q：defer和async的区别
   <summary>点击查看</summary>
   <pre>
   defer：是在HTML解析完之后才会执行，如果是多个，按照加载的顺序依次执行。
-	async：是在加载完之后立即执行，如果是多个，执行顺序和加载顺序无关。
+  async：是在加载完之后立即执行，如果是多个，执行顺序和加载顺序无关。
   </pre>
 </details>
 
@@ -652,6 +652,7 @@ Q：事件机制、冒泡
 <details>
   <summary>点击查看</summary>
   <pre>
+  合成事件是 React模拟原生 DOM事件所有能力的一个事件对象，即浏览器原生事件的跨浏览器包装器。
   我们在jsx中指定的事件处理函数，其实并不会被绑定到对应的DOM元素上。而是都被委托到了更高层的元素上，就像事件委托那样。在React16中，这个更高层的元素就是document（React17是rootNode）。
   当我们在页面中触发原生事件时，原生事件会沿着DOM树先冒泡到document，然后React会找出触发事件的组件，并让React合成事件在组件树中冒泡并触发对应的事件处理函数。
 也就是说：原生事件的冒泡和React合成事件的冒泡是<b>两个过程</b>，React合成事件的冒泡在原生事件冒泡到document之后才开始。通过jsx指定的事件处理函数会在React合成事件冒泡的过程中被触发。而直接绑定在DOM元素上的事件处理函数会在原生事件冒泡的过程中被触发。
@@ -661,6 +662,7 @@ Q：事件机制、冒泡
 	<img src="https://img.toutiao.io/c/98797606d8847b0919021ee6e9bd3af9"/>
   </pre>
 </details>
+
 
 
 
@@ -722,7 +724,6 @@ Q：setState 同步还是异步？比较常问，问的可能也比较深入
 **原因：**在React的setState函数实现中，会根据一个变量isBatchingUpdates判断是直接更新this.state还是放到队列中回头再说，而isBatchingUpdates默认是false，也就表示setState会同步更新this.state，但是，<b>有一个函数batchedUpdates，这个函数会把isBatchingUpdates修改为true，而当React在调用事件处理函数之前就会调用这个batchedUpdates，造成的后果，就是由React控制的事件处理过程setState不会同步更新this.state</b>。
   </pre>
 </details>
-
 [setState是同步的还是异步的？](https://www.jianshu.com/p/ce39a08b585e)
 
 
@@ -743,8 +744,6 @@ Q：如何设计React组件？
 
 
 Q：说说你对虚拟DOM的理解？直接全量更新和diff哪个快（这个问题要分情况）？
-
-
 
 <details>
   <summary>点击查看</summary>
@@ -996,6 +995,8 @@ Q：hooks的限制条件？
   <img src='https://s0.lgstatic.com/i/image2/M01/06/8E/Cip5yGAFRQKANoZGAAGHTWta8TA980.png'/>
   </pre>
 </details>
+[React hooks 它不是魔法，是数组](https://github.com/penouc/blog/issues/10)
+
 
 
 Q：谈谈hooks的设计模式？
@@ -1026,12 +1027,6 @@ Q：useEffect 与 useLayoutEffect 区别在哪里？
   <img src='https://s0.lgstatic.com/i/image2/M01/08/32/Cip5yGAKhRCAX99HAAD0YKYP40c980.png'/>
   </pre>
 </details>
-
-
-Q：为什么不要在循环、条件语句或者嵌套函数中调用hooks？记住官网的一句话，Not Magic, just Arrays
-
-[React hooks 它不是魔法，是数组](https://github.com/penouc/blog/issues/10)
-
 
 
 Q：受控组件和非受控组件
@@ -1395,8 +1390,8 @@ Q：浅说 XSS 和 CSRF
 <details>
   <summary>点击查看</summary>
   <pre>
-  <b>CSRF</b>：Cross-site-request forgery 跨站请求伪造。是向你页面注入JS去执行，然后JS函数体里做它想做的事情。
-  <b>XSS</b>：Cross-site scripting 跨域脚本攻击。是利用你本身的漏洞去帮助你主动执行那些接口，CSRF依赖于你这个用户要登录网站。
+  <b>XSS</b>：Cross-site scripting 跨域脚本攻击。是向你页面注入JS去执行，然后JS函数体里做它想做的事情。
+  <b>CSRF</b>：Cross-site-request forgery 跨站请求伪造。是利用你本身的漏洞去帮助你主动执行那些接口，CSRF依赖于你这个用户要登录网站。
   <b>防御 XSS 攻击</b>:
   HttpOnly 防止劫取 Cookie
   用户的输入检查
@@ -1629,7 +1624,6 @@ Q：Stream 概念？使用场景？常见的Stream？
   4、Transform - 在读写过程中可以修改和变换数据的 Duplex 流 (例如 zlib.createDeflate())
   </pre>
 </details>
-
 [前端有关node.js的面试题含答案](https://my.oschina.net/u/4696788/blog/4676580)
 
 
@@ -1691,9 +1685,6 @@ Q：webpack 构建流程？打包原理？
   <img src='https://user-gold-cdn.xitu.io/2019/9/5/16d003a354ad6e96?imageView2/0/w/1280/h/960/format/webp/ignore-error/1' />
   </pre>
 </details>
-
-
-
 [webpack打包原理 ? 看完这篇你就懂了 !](https://segmentfault.com/a/1190000021494964)
 
 [了不起的 Webpack 构建流程学习指南](https://segmentfault.com/a/1190000022991056)
@@ -1717,7 +1708,6 @@ Q：webpack 项目中做的一些优化
   	c、代码可读性更好
   </pre>
 </details>
-
 [webpack优化解决项目体积大、打包时间长、刷新时间长问题！](https://cloud.tencent.com/developer/article/1643104)
 
 
