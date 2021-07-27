@@ -13,7 +13,6 @@ let obj = {
 };
 let o = {};
 const deepCopy = (newObj, oldObj) => {
-	console.log(o, newObj, oldObj);
 	for (let k in oldObj) {
 		let item = oldObj[k];
 		//判断是数组？对象？简单类型？
