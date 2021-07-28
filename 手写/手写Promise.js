@@ -133,29 +133,64 @@ Promise.reject = function (val) {
 	});
 };
 //race方法
-Promise.race = function (promises) {
+Promise.race = function (iterators) {
 	return new Promise((resolve, reject) => {
-		for (let i = 0; i < promises.length; i++) {
-			promises[i].then(resolve, reject);
+		for (const p of iterators) {
+			Promise.resolve(p)
+				.then(res => {
+					resolve(res);
+				})
+				.catch(e => {
+					reject(e);
+				});
 		}
 	});
 };
 //all方法(获取所有的promise，都执行then，把结果放到数组，一起返回)
-Promise.all = function (promises) {
-	let arr = [];
-	let i = 0;
-	function processData(index, data, resolveFunc) {
-		arr[index] = data;
-		i++;
-		if (i == promises.length) {
-			resolveFunc && resolveFunc(arr);
-		}
-	}
+Promise.all = function (iterator) {
+	let count = 0; //用于计数，当等于len时就resolve
+	let len = iterator.length;
+	let res = []; //用于存放结果
 	return new Promise((resolve, reject) => {
-		for (let i = 0; i < promises.length; i++) {
-			promises[i].then(data => {
-				processData(i, data, resolve);
-			}, reject);
+		for (let i in iterator) {
+			Promise.resolve(iterator[i]) //先转化为Promise对象
+				.then(data => {
+					res[i] = data;
+					if (++count === len) {
+						resolve(res);
+					}
+				})
+				.catch(e => {
+					reject(e);
+				});
 		}
+	});
+};
+
+// 只要其中的一个 promise 成功，就返回那个已经成功的 promise
+// 如果可迭代对象中没有一个 promise 成功（即所有的 promises 都失败/拒绝），就返回一个失败的 promise 和 AggregateError 类型的实例，它是 Error 的一个子类，用于把单一的错误集合在一起
+Promise.any = function (promises) {
+	return new Promise((resolve, reject) => {
+		promises = Array.isArray(promises) ? promises : [];
+		let len = promises.length;
+		// 用于收集所有 reject
+		let errs = [];
+		// 如果传入的是一个空数组，那么就直接返回 AggregateError
+		if (len === 0)
+			return reject(new AggregateError('All promises were rejected'));
+		promises.forEach(promise => {
+			promise.then(
+				value => {
+					resolve(value);
+				},
+				err => {
+					len--;
+					errs.push(err);
+					if (len === 0) {
+						reject(new AggregateError(errs));
+					}
+				}
+			);
+		});
 	});
 };

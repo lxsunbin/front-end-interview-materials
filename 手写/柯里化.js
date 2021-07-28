@@ -9,6 +9,15 @@
 var curry = fn =>
 	(judge = (...args) =>
 		args.length === fn.length ? fn(...args) : arg => judge(...args, arg));
+var curry2 = fn => {
+	return (judge = (...args) => {
+		if (args.length === fn.length) {
+			return fn(...args);
+		} else {
+			return arg => judge(...args, arg);
+		}
+	});
+};
 
 const add = (a, b, c) => a + b + c;
 const curryTest = curry(add);
