@@ -38,10 +38,10 @@ const quickSort = arr => {
  */
 const insertSort = arr => {
 	for (let i = 1; i < arr.length; i++) {
+		let temp = arr[i];
 		let j = i - 1;
 		if (arr[i] < arr[j]) {
-			let temp = arr[i];
-			while (j >= 0 && temp < arr[j]) {
+			while (j >= 0 && arr[j] > temp) {
 				arr[j + 1] = arr[j];
 				j--;
 			}

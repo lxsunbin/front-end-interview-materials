@@ -1,34 +1,41 @@
-Array.prototype.myReduce = function (callback, initialValue) {
-	if (this == null) {
-		throw new TypeError('this is null or not defined');
+Array.prototype.myreduce = function (fn, initialValue) {
+	// fn(accumulator, currentValue, currentIndex, sourceArray)
+	// 判断调用对象是否为数组
+	if (Object.prototype.toString.call([]) !== '[object Array]') {
+		throw new TypeError('not a array');
 	}
-	if (typeof callback !== 'function') {
-		throw new TypeError(callback + ' is not a function');
+	// 判断调用数组是否为空数组
+	const sourceArray = this;
+	if (sourceArray.length === 0) {
+		throw new TypeError('empty array');
 	}
-	const O = Object(this);
-	const len = O.length >>> 0;
-	let k = 0,
-		acc;
+	// 判断传入的第一个参数是否为函数
+	if (typeof fn !== 'function') {
+		throw new TypeError(`${fn} is not a function`);
+	}
 
-	if (arguments.length > 1) {
-		acc = initialValue;
+	// 第二步
+	// 回调函数参数初始化
+	let accumulator, currentValue, currentIndex;
+	if (initialValue) {
+		accumulator = initialValue;
+		currentIndex = 0;
 	} else {
-		// 没传入初始值的时候，取数组中第一个非 empty 的值为初始值
-		while (k < len && !(k in O)) {
-			k++;
-		}
-		if (k > len) {
-			throw new TypeError('Reduce of empty array with no initial value');
-		}
-		acc = O[k++];
+		accumulator = arr[0];
+		currentIndex = 1;
 	}
-	while (k < len) {
-		if (k in O) {
-			acc = callback(acc, O[k], k, O);
-		}
-		k++;
+
+	// 第三步
+	// 开始循环
+	while (currentIndex < sourceArray.length) {
+		currentValue = sourceArray[currentIndex];
+		accumulator = fn(accumulator, currentValue, currentIndex, sourceArray);
+		currentIndex++;
 	}
-	return acc;
+
+	// 第四步
+	// 返回结果
+	return accumulator;
 };
 
 //------------------------------------------------------------------------------------------
